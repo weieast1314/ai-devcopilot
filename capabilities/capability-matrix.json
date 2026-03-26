@@ -1,0 +1,129 @@
+{
+  "version": "1.0.0",
+  "capabilities": {
+    "file.read": {
+      "description": "读取项目文件与文档内容"
+    },
+    "file.write": {
+      "description": "修改或创建项目内文件"
+    },
+    "shell.exec": {
+      "description": "执行本地命令、Git、构建与部署命令"
+    },
+    "mcp.lark": {
+      "description": "通过飞书 MCP 读取文档内容与元数据"
+    },
+    "web.fetch": {
+      "description": "通过 HTTP 抓取网页或文档内容"
+    },
+    "interaction.ask_followup": {
+      "description": "向用户发起结构化选项确认"
+    },
+    "state.persistence": {
+      "description": "在会话之间持久化流程状态"
+    },
+    "code.review": {
+      "description": "执行代码审查或读取审查结果"
+    }
+  },
+  "targets": {
+    "pipelines": {
+      "dev-flow": {
+        "requiredAll": [
+          "file.read",
+          "file.write"
+        ],
+        "optional": [
+          "shell.exec",
+          "mcp.lark",
+          "web.fetch",
+          "interaction.ask_followup",
+          "state.persistence",
+          "code.review"
+        ],
+        "phaseRequired": {
+          "verification": [
+            "shell.exec"
+          ],
+          "delivery": [
+            "shell.exec"
+          ]
+        }
+      },
+      "hotfix-flow": {
+        "requiredAll": [
+          "file.read",
+          "file.write"
+        ],
+        "optional": [
+          "shell.exec",
+          "interaction.ask_followup",
+          "state.persistence",
+          "code.review"
+        ],
+        "phaseRequired": {
+          "delivery": [
+            "shell.exec"
+          ]
+        }
+      }
+    },
+    "composites": {
+      "requirement-fetch": {
+        "requiredAll": [
+          "file.read"
+        ],
+        "requiredAnyOf": [
+          [
+            "mcp.lark"
+          ],
+          [
+            "web.fetch"
+          ]
+        ],
+        "optional": [
+          "interaction.ask_followup"
+        ]
+      },
+      "writing-plans": {
+        "requiredAll": [
+          "file.read"
+        ],
+        "optional": [
+          "interaction.ask_followup",
+          "state.persistence"
+        ]
+      },
+      "code-verification": {
+        "requiredAll": [
+          "shell.exec"
+        ],
+        "optional": [
+          "code.review",
+          "interaction.ask_followup"
+        ]
+      },
+      "code-delivery": {
+        "requiredAll": [
+          "shell.exec"
+        ],
+        "optional": [
+          "interaction.ask_followup"
+        ]
+      }
+    },
+    "atoms": {
+      "feishu-doc-fetch": {
+        "requiredAnyOf": [
+          [
+            "mcp.lark"
+          ],
+          [
+            "web.fetch"
+          ]
+        ],
+        "optional": []
+      }
+    }
+  }
+}

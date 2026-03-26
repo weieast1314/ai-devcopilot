@@ -1,0 +1,48 @@
+# AI DevCopilot 团队预设配置模板
+# 复制此文件到 ~/.ai-devcopilot/env.sh 并填入你的信息
+
+# ============================================================
+# Jenkins 配置（必填）
+# ============================================================
+
+# Jenkins 服务器地址
+export JENKINS_URL="http://your-jenkins-server:8080"
+
+# Jenkins 用户名
+export JENKINS_USERNAME="your_username"
+
+# Jenkins API Token（在 Jenkins > 用户 > 设置 > API Token 获取）
+export JENKINS_API_TOKEN="your_api_token_here"
+
+# ============================================================
+# Nacos 配置（按需）
+# ============================================================
+
+# Nacos 服务器地址
+export NACOS_SERVER_ADDR="your-nacos-server:8848"
+
+# Nacos 命名空间
+export NACOS_NAMESPACE="dev"
+
+# Nacos 分组
+export NACOS_GROUP="DEFAULT_GROUP"
+
+# ============================================================
+# 飞书 MCP 配置（可选，如需使用飞书文档功能）
+# ============================================================
+
+# 飞书应用 ID（在飞书开放平台创建应用获取）
+# export LARK_APP_ID="cli_xxx"
+
+# 飞书应用密钥
+# export LARK_APP_SECRET="xxx"
+
+# ============================================================
+# 项目配置（在项目根目录 .ai-devcopilot/env.sh 中配置）
+# ============================================================
+
+# Jenkins Job 名称 - 开发环境
+# export JENKINS_JOB_DEV="project-name-dev"
+
+# Jenkins Job 名称 - 测试环境
+# export JENKINS_JOB_TEST="project-name-test"

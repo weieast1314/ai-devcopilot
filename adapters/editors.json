@@ -1,0 +1,28 @@
+{
+  "version": "1.0.0",
+  "defaultEditor": "claude",
+  "editors": [
+    {
+      "id": "claude",
+      "displayName": "Claude",
+      "adapterFile": "claude.json"
+    },
+    {
+      "id": "codebuddy",
+      "displayName": "CodeBuddy",
+      "adapterFile": "codebuddy.json"
+    },
+    {
+      "id": "opencode",
+      "displayName": "OpenCode",
+      "adapterFile": "opencode.json"
+    }
+  ],
+  "sharedConfig": {
+    "globalConfigDir": "~/.ai-devcopilot",
+    "globalEnvFile": "~/.ai-devcopilot/env.sh",
+    "projectConfigDir": ".ai-devcopilot",
+    "projectEnvFile": ".ai-devcopilot/env.sh",
+    "projectMemoryDir": ".ai-devcopilot/memory"
+  }
+}

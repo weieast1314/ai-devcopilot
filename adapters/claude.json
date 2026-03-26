@@ -1,0 +1,38 @@
+{
+  "id": "claude",
+  "displayName": "Claude",
+  "editorHome": "~/.claude",
+  "paths": {
+    "skillsRoot": "~/.claude/skills",
+    "skillsInstallDir": "~/.claude/skills/ai-devcopilot",
+    "mcpConfigPath": "~/.claude/mcp.json"
+  },
+  "install": {
+    "scanMode": "top_level_only",
+    "requiresTopLevelSymlink": true,
+    "linkStrategy": {
+      "recordFile": "~/.claude/skills/.ai-devcopilot-links",
+      "categories": [
+        {
+          "name": "atoms",
+          "depth": 2
+        },
+        {
+          "name": "composites",
+          "depth": 2
+        },
+        {
+          "name": "pipelines",
+          "depth": 1
+        }
+      ]
+    }
+  },
+  "runtime": {
+    "supportsMcp": true,
+    "supportsAutoRun": true,
+    "supportsAskFollowup": true,
+    "supportsStatePersistence": true,
+    "agentFrontmatterProfile": "claude"
+  }
+}

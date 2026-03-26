@@ -1,0 +1,22 @@
+{
+  "id": "codebuddy",
+  "displayName": "CodeBuddy",
+  "editorHome": "~/.codebuddy",
+  "paths": {
+    "skillsRoot": "~/.codebuddy/skills",
+    "skillsInstallDir": "~/.codebuddy/skills/ai-devcopilot",
+    "mcpConfigPath": "~/.codebuddy/mcp.json"
+  },
+  "install": {
+    "scanMode": "package_root",
+    "requiresTopLevelSymlink": false,
+    "linkStrategy": null
+  },
+  "runtime": {
+    "supportsMcp": true,
+    "supportsAutoRun": true,
+    "supportsAskFollowup": true,
+    "supportsStatePersistence": true,
+    "agentFrontmatterProfile": "codebuddy"
+  }
+}

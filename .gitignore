@@ -1,0 +1,58 @@
+# AI DevCopilot .gitignore
+
+# 环境配置文件（包含敏感信息）
+.env
+*.env
+.env.*
+
+# AI DevCopilot 配置目录
+.devsop/env.sh
+.devsop/plans/
+.devsop/memory/
+
+# macOS 系统文件
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE 配置
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# 日志文件
+*.log
+logs/
+
+# 临时文件
+tmp/
+temp/
+*.tmp
+*.temp
+
+# 依赖目录
+node_modules/
+vendor/
+target/
+build/
+dist/
+
+# 编译产物
+*.class
+*.jar
+*.war
+*.ear
+*.o
+*.so
+*.dylib
+
+# 敏感信息备份
+*.bak
+*.backup
+*~
+
+# AI DevCopilot 数据目录（可选提交）
+.ai-devcopilot/plans/
+.ai-devcopilot/memory/

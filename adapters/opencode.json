@@ -1,0 +1,22 @@
+{
+  "id": "opencode",
+  "displayName": "OpenCode",
+  "editorHome": "~/.opencode",
+  "paths": {
+    "skillsRoot": "~/.opencode/skills",
+    "skillsInstallDir": "~/.opencode/skills/ai-devcopilot",
+    "mcpConfigPath": "~/.opencode/mcp.json"
+  },
+  "install": {
+    "scanMode": "package_root",
+    "requiresTopLevelSymlink": false,
+    "linkStrategy": null
+  },
+  "runtime": {
+    "supportsMcp": true,
+    "supportsAutoRun": true,
+    "supportsAskFollowup": true,
+    "supportsStatePersistence": true,
+    "agentFrontmatterProfile": "opencode"
+  }
+}
