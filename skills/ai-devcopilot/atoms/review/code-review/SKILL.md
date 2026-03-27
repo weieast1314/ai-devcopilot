@@ -44,7 +44,7 @@ git diff
 🔍 代码审查
 ═══════════════════════════════════════════
 
-审查范围: feature/23182-ai-call-log
+审查范围: feat/23182-ai-call-log
 变更文件: 5 个
 
 [1/3] 安全检查
@@ -95,7 +95,7 @@ git diff
 
 **输出**:
 ```
-审查范围: feature/23182-ai-call-log
+审查范围: feat/23182-ai-call-log
 变更文件: 5 个
 
 [1/3] 安全检查 ⚠ 1 个问题
@@ -108,4 +108,4 @@ git diff
 ## 相关技能
 
 - [Verification](../../verification/verification/SKILL.md)
-- [Finish Branch](../../../composites/delivery-workflow/finish-branch/SKILL.md)
+- [Code Delivery](../../../composites/workflow/code-delivery/SKILL.md)

@@ -46,22 +46,63 @@ if [ $CHECK_FAILED -eq 1 ]; then
 fi
 echo ""
 
-# --- 克隆仓库 ---
+# --- 克隆/更新仓库 ---
 echo -e "${YELLOW}[2/2] 下载 AI DevCopilot${NC}"
 echo ""
 
-# 如果目录已存在，先删除
-if [ -d "$INSTALL_DIR" ]; then
-    echo -e "  ${YELLOW}检测到已有安装目录，正在更新...${NC}"
-    rm -rf "$INSTALL_DIR"
+backup_install_dir() {
+    local backup_dir
+    backup_dir="${INSTALL_DIR}.backup.$(date +%Y%m%d%H%M%S)"
+    mv "$INSTALL_DIR" "$backup_dir"
+    echo -e "  ${YELLOW}已备份现有目录到: $backup_dir${NC}"
+}
+
+clone_repo() {
+    git clone --depth 1 "$REPO_URL" "$INSTALL_DIR" 2>&1 | while read -r line; do
+        echo -e "  $line"
+    done
+}
+
+update_repo() {
+    local current_remote
+    local repo_status
+    current_remote=$(git -C "$INSTALL_DIR" remote get-url origin 2>/dev/null || true)
+    repo_status=$(git -C "$INSTALL_DIR" status --short --untracked-files=all 2>/dev/null || true)
+
+    if [ "$current_remote" != "$REPO_URL" ]; then
+        echo -e "  ${YELLOW}检测到同名目录但远端仓库不匹配，将保留现有目录并重新下载。${NC}"
+        backup_install_dir
+        clone_repo
+        return
+    fi
+
+    if [ -n "$repo_status" ]; then
+        echo -e "  ${YELLOW}检测到现有安装目录包含本地修改，将保留现有目录并重新下载。${NC}"
+        backup_install_dir
+        clone_repo
+        return
+    fi
+
+    echo -e "  ${YELLOW}检测到已有安装目录，正在执行快速更新...${NC}"
+    git -C "$INSTALL_DIR" fetch --depth 1 origin main 2>&1 | while read -r line; do
+        echo -e "  $line"
+    done
+    git -C "$INSTALL_DIR" reset --hard FETCH_HEAD >/dev/null 2>&1
+    git -C "$INSTALL_DIR" clean -fd >/dev/null 2>&1
+}
+
+if [ -d "$INSTALL_DIR/.git" ]; then
+    update_repo
+elif [ -d "$INSTALL_DIR" ]; then
+    echo -e "  ${YELLOW}检测到已有同名目录但不是 Git 仓库，将保留现有目录并重新下载。${NC}"
+    backup_install_dir
+    clone_repo
+else
+    clone_repo
 fi
 
-git clone --depth 1 "$REPO_URL" "$INSTALL_DIR" 2>&1 | while read -r line; do
-    echo -e "  $line"
-done
-
 if [ ! -d "$INSTALL_DIR" ]; then
-    echo -e "${RED}✗ 克隆失败${NC}"
+    echo -e "${RED}✗ 下载失败${NC}"
     exit 1
 fi
 

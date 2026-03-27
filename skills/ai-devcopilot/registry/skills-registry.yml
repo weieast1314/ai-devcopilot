@@ -1,125 +1,36 @@
-# Skills Registry (技能注册表)
-
-此文件用于管理所有 Skill 的版本和依赖关系。
-
-## 原子 Skill (Atoms)
-
-### analysis (分析)
-
-| Skill | 版本 | 描述 |
-|-------|------|------|
-| entry-router | 1.0.0 | 顶层路由入口，判断用户输入触发哪个 Pipeline |
-| input-detect | 1.1.0 | 自动识别输入类型并路由（组合层内部组件） |
-| requirement-extract | 1.0.0 | 从文字描述提取需求信息 |
-| requirement-parse | 1.0.0 | 统一解析需求为标准结构 |
-
-### feishu (飞书)
-
-| Skill | 版本 | 描述 |
-|-------|------|------|
-| feishu-doc-fetch | 1.0.0 | 获取飞书文档内容 |
-
-### git (Git)
-
-| Skill | 版本 | 描述 |
-|-------|------|------|
-| git-branch-create | 1.0.0 | 创建符合规范的分支 |
-| git-branch-validate | 1.0.0 | 验证分支命名规范 |
-
-### planning (计划)
-
-| Skill | 版本 | 描述 |
-|-------|------|------|
-| writing-plans | 1.0.0 | 生成执行计划文档 |
-| executing-plans | 1.0.0 | 执行计划代码修改，完成后必须询问用户下一步动作 |
-
-### devops (运维)
-
-| Skill | 版本 | 描述 |
-|-------|------|------|
-| jenkins-trigger | 1.0.0 | 触发 Jenkins 构建 |
-| sql-migration | 1.0.0 | 生成 SQL 迁移脚本 |
-| nacos-config | 1.0.0 | 管理 Nacos 配置 |
-
-### verification (验证)
-
-| Skill | 版本 | 描述 |
-|-------|------|------|
-| verification | 1.0.0 | 编译和测试验证，完成后必须询问用户下一步动作 |
-
-### review (审查)
-
-| Skill | 版本 | 描述 |
-|-------|------|------|
-| code-review | 1.0.0 | 代码审查 |
-
-### memory (记忆)
-
-| Skill | 版本 | 描述 |
-|-------|------|------|
-| update-memory | 1.0.0 | 更新项目记忆 |
-
-## 组合 Skill (Composites)
-
-### workflow (工作流)
-
-| Skill | 版本 | 依赖 | 描述 |
-|-------|------|------|------|
-| requirement-fetch | 1.0.0 | input-detect, feishu-doc-fetch, requirement-extract, requirement-parse | 多来源需求获取 |
-| requirement-to-branch | 1.0.0 | git-branch-create, git-branch-validate | 需求转分支 |
-| writing-plans | 1.0.0 | writing-plans (atom) | 生成执行计划 |
-| executing-plans | 1.0.0 | executing-plans (atom) | 执行计划 |
-| code-verification | 1.0.0 | verification, code-review | 代码验证 |
-| code-delivery | 1.0.0 | jenkins-trigger | 代码交付 |
-
-## Pipeline (流程)
-
-| Pipeline | 版本 | 依赖 | 描述 |
-|----------|------|------|------|
-| dev-flow | 2.0.0 | requirement-fetch, requirement-to-branch, executing-plans, code-verification, code-delivery, writing-plans | 标准开发流程 |
-| hotfix-flow | 2.0.0 | requirement-fetch, requirement-to-branch, executing-plans, code-verification, code-delivery | 热修复流程 |
-
-## 能力矩阵与降级规则
-
-能力定义与完整清单维护在：
-- `capabilities/capability-matrix.json`
-- `capabilities/fallback-rules.json`
-
-### 核心对象能力摘要
-
-| 对象 | 必需能力 | 可选能力 | 缺失时的默认处理 |
-|------|----------|----------|------------------|
-| `dev-flow` | `file.read`, `file.write` | `shell.exec`, `mcp.lark`, `web.fetch`, `interaction.ask_followup`, `state.persistence`, `code.review` | 缺少结构化交互时退化为纯文本确认；缺少状态持久化时仅保留会话内状态；缺少命令执行时停止自动验证/交付并输出手动命令 |
-| `hotfix-flow` | `file.read`, `file.write` | `shell.exec`, `interaction.ask_followup`, `state.persistence`, `code.review` | 缺少命令执行时仅保留修复方案与手动交付指引 |
-| `requirement-fetch` | `file.read` + (`mcp.lark` 或 `web.fetch`) | `interaction.ask_followup` | 无法远程取文档时退化为让用户粘贴需求原文 |
-| `writing-plans` | `file.read` | `interaction.ask_followup`, `state.persistence` | 结构化确认退化为普通文本确认；无状态持久化时仅保留当前会话计划 |
-| `code-verification` | `shell.exec` | `code.review`, `interaction.ask_followup` | 无命令执行时仅输出手动验证命令；无审查能力时只做编译/测试 |
-| `code-delivery` | `shell.exec` | `interaction.ask_followup` | 无命令执行时仅输出 Git/Jenkins/PR 手动交付步骤 |
-| `feishu-doc-fetch` | `mcp.lark` 或 `web.fetch` | - | 两者都缺失时要求用户手动粘贴飞书文档内容 |
-
-## 版本规范
-
-### 版本号格式
-
-```
-MAJOR.MINOR.PATCH
-
-MAJOR: 不兼容的 API 修改
-MINOR: 向后兼容的功能新增
-PATCH: 向后兼容的问题修复
-```
-
-### 升级规则
-
-1. **原子 Skill 升级**
-   - PATCH: 修复 bug，不改变接口
-   - MINOR: 新增可选功能，保持兼容
-   - MAJOR: 接口变更，需同步更新依赖方
-
-2. **组合 Skill 升级**
-   - 依赖变更时同步更新版本
-   - 记录依赖版本范围
-
-3. **Pipeline 升级**
-   - 流程变更时更新版本
-   - 记录完整依赖树
+{
+  "version": "1.0.0",
+  "atoms": [
+    { "name": "entry-router", "category": "analysis", "version": "1.0.0", "description": "顶层路由入口，判断用户输入触发哪个 Pipeline" },
+    { "name": "input-detect", "category": "analysis", "version": "1.1.0", "description": "自动识别输入类型并路由（组合层内部组件）" },
+    { "name": "requirement-extract", "category": "analysis", "version": "1.0.0", "description": "从文字描述提取需求信息" },
+    { "name": "requirement-parse", "category": "analysis", "version": "1.0.0", "description": "统一解析需求为标准结构" },
+    { "name": "feishu-doc-fetch", "category": "feishu", "version": "1.0.0", "description": "获取飞书文档内容" },
+    { "name": "git-branch-create", "category": "git", "version": "1.0.0", "description": "创建符合规范的分支" },
+    { "name": "git-branch-validate", "category": "git", "version": "1.0.0", "description": "验证分支命名规范" },
+    { "name": "writing-plans", "category": "planning", "version": "1.0.0", "description": "生成执行计划文档" },
+    { "name": "executing-plans", "category": "planning", "version": "1.0.0", "description": "执行计划代码修改，完成后必须询问用户下一步动作" },
+    { "name": "jenkins-trigger", "category": "devops", "version": "1.0.0", "description": "触发 Jenkins 构建" },
+    { "name": "sql-migration", "category": "devops", "version": "1.0.0", "description": "生成 SQL 迁移脚本" },
+    { "name": "nacos-config", "category": "devops", "version": "1.0.0", "description": "管理 Nacos 配置" },
+    { "name": "verification", "category": "verification", "version": "1.0.0", "description": "编译和测试验证，完成后必须询问用户下一步动作" },
+    { "name": "code-review", "category": "review", "version": "1.0.0", "description": "代码审查" },
+    { "name": "update-memory", "category": "memory", "version": "1.0.0", "description": "更新项目记忆" }
+  ],
+  "composites": [
+    { "name": "requirement-fetch", "category": "workflow", "version": "1.0.0", "dependsOn": ["input-detect", "feishu-doc-fetch", "requirement-extract", "requirement-parse"], "description": "多来源需求获取" },
+    { "name": "requirement-to-branch", "category": "workflow", "version": "1.0.0", "dependsOn": ["git-branch-create", "git-branch-validate"], "description": "需求转分支" },
+    { "name": "writing-plans", "category": "workflow", "version": "1.0.0", "dependsOn": ["writing-plans"], "description": "生成执行计划" },
+    { "name": "executing-plans", "category": "workflow", "version": "1.0.0", "dependsOn": ["executing-plans"], "description": "执行计划" },
+    { "name": "code-verification", "category": "workflow", "version": "1.0.0", "dependsOn": ["verification", "code-review"], "description": "代码验证" },
+    { "name": "code-delivery", "category": "workflow", "version": "1.0.0", "dependsOn": ["jenkins-trigger", "update-memory"], "description": "代码交付" }
+  ],
+  "pipelines": [
+    { "name": "dev-flow", "version": "1.3.0", "dependsOn": ["requirement-fetch", "requirement-to-branch", "writing-plans", "executing-plans", "code-verification", "code-delivery"], "description": "标准开发流程" },
+    { "name": "hotfix-flow", "version": "1.3.0", "dependsOn": ["requirement-fetch", "requirement-to-branch", "executing-plans", "code-verification", "code-delivery"], "description": "热修复流程" }
+  ],
+  "capabilityRefs": {
+    "matrix": "capabilities/capability-matrix.json",
+    "fallbacks": "capabilities/fallback-rules.json"
+  }
+}

@@ -11,7 +11,7 @@ const path = require('path');
 
 const root = process.env.ROOT_DIR_ENV;
 const manifest = JSON.parse(fs.readFileSync(path.join(root, 'adapters', 'editors.json'), 'utf8'));
-const requiredShared = ['globalConfigDir', 'globalEnvFile', 'projectConfigDir', 'projectEnvFile', 'projectMemoryDir'];
+const requiredShared = ['globalConfigDir', 'globalEnvFile', 'projectConfigDir', 'projectEnvFile', 'projectMemoryDir', 'projectStateDir'];
 const requiredPaths = ['skillsRoot', 'skillsInstallDir', 'mcpConfigPath'];
 const requiredRuntime = ['supportsMcp', 'supportsAutoRun', 'supportsAskFollowup', 'supportsStatePersistence', 'agentFrontmatterProfile'];
 const requiredInstall = ['scanMode', 'requiresTopLevelSymlink'];

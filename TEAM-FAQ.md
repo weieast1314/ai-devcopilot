@@ -214,7 +214,7 @@ echo $JENKINS_JOB_DEV
 直接把当前状态告诉 AI，例如：
 
 ```text
-继续刚才的任务：当前分支 feature/23181-login，计划已确认，已完成 Controller，继续执行 Service、验证和交付。
+继续刚才的任务：当前分支 feat/23181-login，计划已确认，已完成 Controller，继续执行 Service、验证和交付。
 ```
 
 至少补充三类信息：

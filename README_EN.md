@@ -3,11 +3,11 @@
 <div align="center">
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-2.0.0-green.svg)](CHANGELOG.md)
-[![GitHub Stars](https://img.shields.io/github/stars/ai-devcopilot-team/ai-devcopilot?style=social)](https://github.com/ai-devcopilot-team/ai-devcopilot/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/ai-devcopilot-team/ai-devcopilot?style=social)](https://github.com/ai-devcopilot-team/ai-devcopilot/network/members)
-[![GitHub Issues](https://img.shields.io/github/issues/ai-devcopilot-team/ai-devcopilot)](https://github.com/ai-devcopilot-team/ai-devcopilot/issues)
-[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/ai-devcopilot-team/ai-devcopilot)](https://github.com/ai-devcopilot-team/ai-devcopilot/pulls)
+[![Version](https://img.shields.io/badge/Version-1.3.0-green.svg)](CHANGELOG.md)
+[![GitHub Stars](https://img.shields.io/github/stars/weieast1314/ai-devcopilot?style=social)](https://github.com/weieast1314/ai-devcopilot/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/weieast1314/ai-devcopilot?style=social)](https://github.com/weieast1314/ai-devcopilot/network/members)
+[![GitHub Issues](https://img.shields.io/github/issues/weieast1314/ai-devcopilot)](https://github.com/weieast1314/ai-devcopilot/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/weieast1314/ai-devcopilot)](https://github.com/weieast1314/ai-devcopilot/pulls)
 
 **A standardized software development workflow based on AI-assisted programming, achieving full-process automation from requirements acquisition to code implementation and deployment verification through a highly integrated Skills system.**
 
@@ -326,7 +326,7 @@ This routes to `hotfix-flow`. Compared with the standard development flow:
 If the conversation is interrupted, the editor restarts, or you switch sessions, resume by restating the current status, for example:
 
 ```text
-Continue the previous task: current branch is feature/23181-login, the plan is already confirmed, API work is done, continue with service logic and verification
+Continue the previous task: current branch is feat/23181-login, the plan is already confirmed, API work is done, continue with service logic and verification
 ```
 
 If you are not sure where the workflow stopped, at least tell AI:
@@ -469,6 +469,14 @@ ai-devcopilot/
 
 ---
 
+## Maintainer Notes
+
+- `core/agent/AI DevCopilot.source.md` and `skills/ai-devcopilot/` are the primary maintenance sources; update them first.
+- `dist/` and the root `AI DevCopilot.md` are generated artifacts and should not be edited manually; run `bash scripts/build-dist.sh` after changing source files.
+- Before opening a PR, it is recommended to run `bash scripts/validate-dist.sh`, `bash scripts/check-registry.sh`, `bash scripts/check-install-targets.sh`, and `bash scripts/smoke-dev-flow.sh`.
+
+---
+
 ## 🤝 Contributing
 
 We welcome contributions of any kind! Please read the [Contributing Guide](CONTRIBUTING.md) to learn how to participate in project development.
@@ -476,15 +484,15 @@ We welcome contributions of any kind! Please read the [Contributing Guide](CONTR
 ### How to Contribute
 
 1. **Fork** this project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'feat: Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
+2. Create your feature branch (`git checkout -b feat/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feat/amazing-feature`)
 5. Open a **Pull Request**
 
 ### Contribution Types
 
-- 🐛 **Report Bugs**: Submit through [Issues](https://github.com/ai-devcopilot-team/ai-devcopilot/issues)
-- 💡 **Feature Suggestions**: Propose through [Discussions](https://github.com/ai-devcopilot-team/ai-devcopilot/discussions)
+- 🐛 **Report Bugs**: Submit through [Issues](https://github.com/weieast1314/ai-devcopilot/issues)
+- 💡 **Feature Suggestions**: Propose through [Discussions](https://github.com/weieast1314/ai-devcopilot/discussions)
 - 📝 **Improve Documentation**: Submit PR directly
 - 🔧 **Code Contributions**: Follow the [Contributing Guide](CONTRIBUTING.md)
 
@@ -515,6 +523,6 @@ Thanks to all contributors who have helped with the AI DevCopilot project!
 
 ---
 
-**Version**: 2.0.0  
+**Version**: 1.3.0  
 **Last Updated**: 2026-03-27  
-**Maintainer**: AI DevCopilot Team
+**Maintainer**: weieast1314

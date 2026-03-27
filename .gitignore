@@ -37,7 +37,9 @@ node_modules/
 vendor/
 target/
 build/
-dist/
+
+# dist/ 为发布产物，需纳入版本控制，因此不在此忽略
+
 
 # 编译产物
 *.class
@@ -53,6 +55,8 @@ dist/
 *.backup
 *~
 
-# AI DevCopilot 数据目录（可选提交）
+# AI DevCopilot 运行时数据目录
 .ai-devcopilot/plans/
 .ai-devcopilot/memory/
+.ai-devcopilot/state/
+

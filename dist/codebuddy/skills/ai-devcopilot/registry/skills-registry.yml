@@ -1,0 +1,36 @@
+{
+  "version": "1.0.0",
+  "atoms": [
+    { "name": "entry-router", "category": "analysis", "version": "1.0.0", "description": "顶层路由入口，判断用户输入触发哪个 Pipeline" },
+    { "name": "input-detect", "category": "analysis", "version": "1.1.0", "description": "自动识别输入类型并路由（组合层内部组件）" },
+    { "name": "requirement-extract", "category": "analysis", "version": "1.0.0", "description": "从文字描述提取需求信息" },
+    { "name": "requirement-parse", "category": "analysis", "version": "1.0.0", "description": "统一解析需求为标准结构" },
+    { "name": "feishu-doc-fetch", "category": "feishu", "version": "1.0.0", "description": "获取飞书文档内容" },
+    { "name": "git-branch-create", "category": "git", "version": "1.0.0", "description": "创建符合规范的分支" },
+    { "name": "git-branch-validate", "category": "git", "version": "1.0.0", "description": "验证分支命名规范" },
+    { "name": "writing-plans", "category": "planning", "version": "1.0.0", "description": "生成执行计划文档" },
+    { "name": "executing-plans", "category": "planning", "version": "1.0.0", "description": "执行计划代码修改，完成后必须询问用户下一步动作" },
+    { "name": "jenkins-trigger", "category": "devops", "version": "1.0.0", "description": "触发 Jenkins 构建" },
+    { "name": "sql-migration", "category": "devops", "version": "1.0.0", "description": "生成 SQL 迁移脚本" },
+    { "name": "nacos-config", "category": "devops", "version": "1.0.0", "description": "管理 Nacos 配置" },
+    { "name": "verification", "category": "verification", "version": "1.0.0", "description": "编译和测试验证，完成后必须询问用户下一步动作" },
+    { "name": "code-review", "category": "review", "version": "1.0.0", "description": "代码审查" },
+    { "name": "update-memory", "category": "memory", "version": "1.0.0", "description": "更新项目记忆" }
+  ],
+  "composites": [
+    { "name": "requirement-fetch", "category": "workflow", "version": "1.0.0", "dependsOn": ["input-detect", "feishu-doc-fetch", "requirement-extract", "requirement-parse"], "description": "多来源需求获取" },
+    { "name": "requirement-to-branch", "category": "workflow", "version": "1.0.0", "dependsOn": ["git-branch-create", "git-branch-validate"], "description": "需求转分支" },
+    { "name": "writing-plans", "category": "workflow", "version": "1.0.0", "dependsOn": ["writing-plans"], "description": "生成执行计划" },
+    { "name": "executing-plans", "category": "workflow", "version": "1.0.0", "dependsOn": ["executing-plans"], "description": "执行计划" },
+    { "name": "code-verification", "category": "workflow", "version": "1.0.0", "dependsOn": ["verification", "code-review"], "description": "代码验证" },
+    { "name": "code-delivery", "category": "workflow", "version": "1.0.0", "dependsOn": ["jenkins-trigger", "update-memory"], "description": "代码交付" }
+  ],
+  "pipelines": [
+    { "name": "dev-flow", "version": "2.0.0", "dependsOn": ["requirement-fetch", "requirement-to-branch", "writing-plans", "executing-plans", "code-verification", "code-delivery"], "description": "标准开发流程" },
+    { "name": "hotfix-flow", "version": "2.0.0", "dependsOn": ["requirement-fetch", "requirement-to-branch", "executing-plans", "code-verification", "code-delivery"], "description": "热修复流程" }
+  ],
+  "capabilityRefs": {
+    "matrix": "capabilities/capability-matrix.json",
+    "fallbacks": "capabilities/fallback-rules.json"
+  }
+}

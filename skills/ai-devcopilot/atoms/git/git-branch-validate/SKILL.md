@@ -29,12 +29,12 @@ triggers:
 
 | 前缀 | 用途 | 示例 |
 |------|------|------|
-| `feature/` | 新功能开发 | `feature/23181-ai-classification` |
+| `feat/` | 新功能开发 | `feat/23181-ai-classification` |
 | `fix/` | Bug修复 | `fix/23182-login-token` |
 | `hotfix/` | 紧急修复 | `hotfix/23183-security-patch` |
-| `release/` | 版本发布 | `release/v1.0.0` |
-| `refactor/` | 代码重构 | `refactor/23184-optimize-query` |
-| `docs/` | 文档更新 | `docs/api-documentation` |
+| `refactor/` | 代码重构 | `refactor/23184-query-optimization` |
+| `docs/` | 文档更新 | `docs/update-usage-guide` |
+| `chore/` | 工具或脚本维护 | `chore/update-ci` |
 
 ## 执行流程
 
@@ -47,7 +47,7 @@ CURRENT_BRANCH=$(git branch --show-current)
 ### 步骤 2: 解析分支名称
 
 ```
-提取前缀: feature/fix/release...
+提取前缀: feat/fix/hotfix/refactor/docs/chore...
 提取描述部分
 ```
 
@@ -58,11 +58,11 @@ CURRENT_BRANCH=$(git branch --show-current)
 🌿 分支命名验证
 ═══════════════════════════════════════════
 
-当前分支: feature/23181-ai-classification
+当前分支: feat/23181-ai-classification
 
 检查项:
-✓ 前缀有效: feature
-✓ 格式正确: feature/23181-ai-classification
+✓ 前缀有效: feat
+✓ 格式正确: feat/23181-ai-classification
 ✓ 描述清晰: 23181-ai-classification
 ✓ 字符合法: 仅使用小写字母、数字、连字符
 
@@ -92,7 +92,7 @@ CURRENT_BRANCH=$(git branch --show-current)
 
 **符合规范**:
 ```
-当前分支: feature/23181-ai-classification
+当前分支: feat/23181-ai-classification
 ✓ 分支命名符合规范
 ```
 
@@ -103,11 +103,11 @@ CURRENT_BRANCH=$(git branch --show-current)
 ✗ 格式错误: 缺少斜杠分隔符
 ✗ 包含大写字母
 
-修改建议: git branch -m UserLoginFeature feature/user-login
+修改建议: git branch -m UserLoginFeature feat/user-login
 ```
 
 ## 相关技能
 
 - [Git Branch Create](../git-branch-create/SKILL.md)
-- [Git New Branch](../../../composites/git-workflow/git-new-branch/SKILL.md)
-- [PR Create](../../../composites/pr-workflow/pr-create/SKILL.md)
+- [Requirement to Branch](../../../composites/workflow/requirement-to-branch/SKILL.md)
+- [Code Delivery](../../../composites/workflow/code-delivery/SKILL.md)

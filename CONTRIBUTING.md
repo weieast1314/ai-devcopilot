@@ -47,7 +47,7 @@
    ```
 3. **创建特性分支**：
    ```bash
-   git checkout -b feature/your-feature-name
+   git checkout -b feat/your-feature-name
    ```
 4. **进行修改并测试**
 5. **提交更改**：
@@ -57,7 +57,7 @@
    ```
 6. **推送到您的 Fork**：
    ```bash
-   git push origin feature/your-feature-name
+   git push origin feat/your-feature-name
    ```
 7. **创建 Pull Request**
 
@@ -77,7 +77,9 @@
 | 工具 | 版本要求 | 安装说明 |
 |------|----------|----------|
 | Git | 2.x+ | [安装 Git](https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%AE%89%E8%A3%85-Git) |
-| Bash | 4.x+ | macOS/Linux 自带，用于 Shell 校验脚本 |
+| Bash | 4.x+ | macOS/Linux 自带，Windows 建议使用 Git Bash |
+| Node.js | 18.x+ | 用于 `check-registry.sh`、`check-install-targets.sh` |
+| jq（可选） | 1.6+ | 用于 `build-dist.sh`、`validate-dist.sh` 的增强解析 |
 | PowerShell | 5.1+ | Windows 自带，用于 `install.ps1` |
 | AI 编辑器 | Claude/CodeBuddy/OpenCode | 安装对应编辑器 |
 
@@ -230,26 +232,26 @@ Fixes #456
 ### 分支命名规范
 
 ```
-feature/{issue-id}-{description}   # 新功能
+feat/{issue-id}-{description}      # 新功能
 fix/{issue-id}-{description}       # Bug 修复
 hotfix/{issue-id}-{description}    # 紧急修复
+refactor/{issue-id}-{description}  # 重构
 docs/{description}                 # 文档更新
-refactor/{description}             # 重构
-test/{description}                 # 测试相关
+chore/{description}                # 工具或配置维护
 ```
 
 示例：
-- `feature/123-add-docker-support`
+- `feat/123-add-docker-support`
 - `fix/456-install-path-error`
 - `docs/update-readme`
 
 ### 分支策略
 
-- `main`: 稳定版本分支
-- `develop`: 开发分支
-- `feature/*`: 功能分支
+- `main` 或团队约定的稳定基线分支：稳定代码
+- `feat/*`: 功能分支
 - `fix/*`: 修复分支
 - `hotfix/*`: 紧急修复分支
+- `refactor/*`: 重构分支
 
 ## Pull Request 流程
 

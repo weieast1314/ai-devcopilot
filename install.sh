@@ -11,7 +11,7 @@ DIST_DIR="$SCRIPT_DIR/dist"
 ADAPTERS_DIR="$SCRIPT_DIR/adapters"
 EDITOR_MANIFEST="$ADAPTERS_DIR/editors.json"
 BUILD_DIST_SCRIPT="$SCRIPT_DIR/scripts/build-dist.sh"
-VERSION="2.0.0"
+VERSION="1.3.0"
 
 # 全局配置目录（默认，可由 adapter manifest 覆盖）
 GLOBAL_CONFIG_DIR="$HOME/.ai-devcopilot"
@@ -19,7 +19,9 @@ ENV_FILE="$GLOBAL_CONFIG_DIR/env.sh"
 PROJECT_CONFIG_DIR_REL=".ai-devcopilot"
 PROJECT_ENV_FILE_REL="$PROJECT_CONFIG_DIR_REL/env.sh"
 PROJECT_MEMORY_DIR_REL="$PROJECT_CONFIG_DIR_REL/memory"
+PROJECT_STATE_DIR_REL="$PROJECT_CONFIG_DIR_REL/state"
 TEMPLATE_FILE="$SCRIPT_DIR/env.sh.template"
+FLOW_STATE_TEMPLATE="$SCRIPT_DIR/templates/flow-state.template.json"
 
 # --- 颜色定义 ---
 GREEN='\033[0;32m'
@@ -198,6 +200,7 @@ print_install_plan() {
     echo "    - 全局配置: $ENV_FILE"
     echo "    - 项目配置: $PROJECT_ENV_FILE_REL"
     echo "    - 项目记忆: $PROJECT_MEMORY_DIR_REL"
+    echo "    - 流程状态: $PROJECT_STATE_DIR_REL/flow-state.json"
 }
 
 # 帮助信息
@@ -554,6 +557,12 @@ fi
 # 项目级数据目录
 mkdir -p "$AI_DEVCOPILOT_MEMORY_DIR"
 echo -e "      ✓ 已创建项目数据目录: $PROJECT_MEMORY_DIR_REL/"
+mkdir -p "$AI_DEVCOPILOT_STATE_DIR"
+echo -e "      ✓ 已创建流程状态目录: $PROJECT_STATE_DIR_REL/"
+if [ -f "$FLOW_STATE_TEMPLATE" ] && [ ! -f "$AI_DEVCOPILOT_STATE_FILE" ]; then
+    cp "$FLOW_STATE_TEMPLATE" "$AI_DEVCOPILOT_STATE_FILE"
+    echo -e "      ✓ 已初始化流程状态文件: $PROJECT_STATE_DIR_REL/flow-state.json"
+fi
 echo ""
 
 # --- 5. 全局配置 (交互式) ---
@@ -704,12 +713,13 @@ echo ""
 echo "项目配置:"
 echo -e "  项目配置: ${YELLOW}$PROJECT_ENV_FILE_REL${NC}"
 echo -e "  项目记忆: ${YELLOW}$PROJECT_MEMORY_DIR_REL/${NC}"
+echo -e "  流程状态: ${YELLOW}$PROJECT_STATE_DIR_REL/flow-state.json${NC}"
 echo ""
 echo "下一步:"
 echo "  1. 重启 AI 编辑器以加载新配置"
-echo "  2. 在对话框输入 /dev-flow 或 '开始开发' 开启高效开发"
-echo "  3. 支持的触发词："
-echo "     - /dev-flow    : 标准开发流程"
-echo "     - /hotfix      : 热修复流程"
-echo "     - 飞书文档链接: 自动识别并开始流程"
+echo "  2. 在对话框输入 '开始开发' 或 /dev 开启标准开发流程"
+echo "  3. 推荐触发词："
+echo "     - 开始开发 / /dev : 标准开发流程"
+echo "     - 热修复 / /hotfix : 热修复流程"
+echo "     - 飞书文档链接     : 自动识别并进入标准开发流程"
 echo ""

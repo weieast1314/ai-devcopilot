@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "status": "idle",
+  "currentPipeline": null,
+  "currentStage": null,
+  "currentTask": null,
+  "updatedAt": null,
+  "context": {
+    "branch": null,
+    "requirement": null,
+    "planSummary": null,
+    "notes": []
+  }
+}

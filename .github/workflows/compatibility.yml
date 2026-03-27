@@ -5,13 +5,10 @@ on:
   pull_request:
 
 jobs:
-  unix-validation:
+  linux-validation:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Prepare scripts
-        run: chmod +x install.sh quick-install.sh scripts/*.sh
 
       - name: Shell syntax check
         run: |
@@ -24,27 +21,74 @@ jobs:
           bash -n scripts/smoke-dev-flow.sh
 
       - name: Build dist
-        run: ./scripts/build-dist.sh
+        run: bash scripts/build-dist.sh
 
       - name: Validate dist
-        run: ./scripts/validate-dist.sh
+        run: bash scripts/validate-dist.sh
 
       - name: Validate registry
-        run: ./scripts/check-registry.sh
+        run: bash scripts/check-registry.sh
 
       - name: Validate install targets
-        run: ./scripts/check-install-targets.sh
+        run: bash scripts/check-install-targets.sh
 
       - name: Smoke dev-flow
-        run: ./scripts/smoke-dev-flow.sh
+        run: bash scripts/smoke-dev-flow.sh
+
+  macos-validation:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Shell syntax check
+        run: |
+          bash -n install.sh
+          bash -n quick-install.sh
+          bash -n scripts/build-dist.sh
+          bash -n scripts/validate-dist.sh
+          bash -n scripts/check-registry.sh
+          bash -n scripts/check-install-targets.sh
+          bash -n scripts/smoke-dev-flow.sh
+
+      - name: Build dist
+        run: bash scripts/build-dist.sh
+
+      - name: Validate dist
+        run: bash scripts/validate-dist.sh
+
+      - name: Validate registry
+        run: bash scripts/check-registry.sh
+
+      - name: Validate install targets
+        run: bash scripts/check-install-targets.sh
+
+      - name: Smoke dev-flow
+        run: bash scripts/smoke-dev-flow.sh
 
   windows-validation:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
 
+      - name: Bash validation
+        shell: bash
+        run: |
+          bash -n install.sh
+          bash -n quick-install.sh
+          bash -n scripts/build-dist.sh
+          bash -n scripts/validate-dist.sh
+          bash -n scripts/check-registry.sh
+          bash -n scripts/check-install-targets.sh
+          bash -n scripts/smoke-dev-flow.sh
+          bash scripts/build-dist.sh
+          bash scripts/validate-dist.sh
+          bash scripts/check-registry.sh
+          bash scripts/check-install-targets.sh
+          bash scripts/smoke-dev-flow.sh
+
       - name: Validate PowerShell installer
         shell: pwsh
         run: |
           ./install.ps1 -TargetProject . -Editor all -ValidateOnly -Yes
           ./install.ps1 -TargetProject . -Editor all -DryRun -Yes
+

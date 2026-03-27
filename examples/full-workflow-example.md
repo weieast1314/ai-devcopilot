@@ -27,10 +27,10 @@ AI 编辑器:
       ✓ 描述: ai-call-log
 
 [3/4] 创建开发分支
-      $ git checkout uat
-      $ git pull origin uat
-      $ git checkout -b feature/23182-ai-call-log
-      ✓ 分支: feature/23182-ai-call-log
+      $ git checkout main
+      $ git pull origin main
+      $ git checkout -b feat/23182-ai-call-log
+      ✓ 分支: feat/23182-ai-call-log
 
 [4/4] 生成计划
       ✓ 计划已生成（由编辑器自动管理）
@@ -125,7 +125,7 @@ AI 编辑器:
       ✓ 提交: feat(ai): 新增AI模型调用日志系统
 
 [2/3] 推送远程分支
-      ✓ 推送: feature/23182-ai-call-log
+      ✓ 推送: feat/23182-ai-call-log
 
 [3/3] Jenkins 部署
       ✓ 构建已触发
@@ -201,7 +201,7 @@ AI 编辑器:
 ### 推荐恢复说法
 
 ```text
-用户: 继续刚才的任务：当前分支 feature/23182-ai-call-log，计划已确认，已经完成实体和 Mapper，继续执行 Service、SQL、验证和交付
+用户: 继续刚才的任务：当前分支 feat/23182-ai-call-log，计划已确认，已经完成实体和 Mapper，继续执行 Service、SQL、验证和交付
 ```
 
 ### AI 的理想响应

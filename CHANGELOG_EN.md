@@ -31,16 +31,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Complete installation script and configuration templates
 
 ### Skills System
-- `feishu-doc-to-branch`: Feishu document to branch
-- `git-new-branch`: Intelligent branch creation
+- `entry-router`: Unified entry routing
+- `requirement-fetch`: Multi-source requirement intake
+- `requirement-to-branch`: Requirement to branch
 - `writing-plans`: Planning mode
 - `executing-plans`: Plan execution
-- `verification`: Code verification
-- `finish-branch`: One-click delivery
-- `jenkins-deploy`: Jenkins deployment
+- `code-verification`: Code verification
+- `code-delivery`: Code delivery
+- `jenkins-trigger`: Jenkins deployment trigger
 - `nacos-config`: Nacos configuration management
 - `code-review`: Code review
-- `pr-create`: PR creation
 
 ### Documentation
 - Detailed usage tutorial
@@ -84,4 +84,4 @@ git pull
 
 ---
 
-**Last Updated**: 2026-03-19
+**Last Updated**: 2026-03-27

@@ -12,97 +12,109 @@ const path = require('path');
 const root = process.env.ROOT_DIR_ENV;
 const registryFile = path.join(root, 'skills', 'ai-devcopilot', 'registry', 'skills-registry.yml');
 const skillsDir = path.join(root, 'skills', 'ai-devcopilot');
-const lines = fs.readFileSync(registryFile, 'utf8').split(/\r?\n/);
 
-let context = null;
-let section = null;
-const registered = new Set();
+const registry = JSON.parse(fs.readFileSync(registryFile, 'utf8'));
 
-for (const line of lines) {
-  if (line.startsWith('## 原子 Skill')) {
-    context = 'atoms';
-    continue;
-  }
-  if (line.startsWith('## 组合 Skill')) {
-    context = 'composites';
-    continue;
-  }
-  if (line.startsWith('## Pipeline')) {
-    context = 'pipelines';
-    continue;
-  }
-  if (line.startsWith('## ')) {
-    context = null;
-    continue;
-  }
-  if (line.startsWith('### ')) {
-    section = line.slice(4).split(' ', 1)[0].trim();
-    continue;
-  }
-  if (!line.startsWith('|')) {
-    continue;
-  }
-
-  const cells = line.trim().replace(/^\||\|$/g, '').split('|').map((cell) => cell.trim());
-  if (cells.length === 0) {
-    continue;
-  }
-  if (['Skill', 'Pipeline', '对象', '-------', '----------'].includes(cells[0])) {
-    continue;
-  }
-  if (/^-+$/.test(cells[0])) {
-    continue;
-  }
-
-  const name = cells[0];
-  if (context === 'atoms' && section) {
-    registered.add(`atoms/${section}/${name}`);
-  } else if (context === 'composites' && section) {
-    registered.add(`composites/${section}/${name}`);
-  } else if (context === 'pipelines') {
-    registered.add(`pipelines/${name}`);
+function assertArray(value, name) {
+  if (!Array.isArray(value) || value.length === 0) {
+    throw new Error(`${name} must be a non-empty array`);
   }
 }
 
-function collectDirs(baseRelative, minDepth, maxDepth) {
+assertArray(registry.atoms, 'atoms');
+assertArray(registry.composites, 'composites');
+assertArray(registry.pipelines, 'pipelines');
+
+const declaredAtoms = new Set();
+const declaredComposites = new Set();
+const declaredPipelines = new Set();
+const dependencyNames = new Set();
+
+for (const atom of registry.atoms) {
+  if (!atom.name || !atom.category || !atom.version) {
+    throw new Error(`invalid atom entry: ${JSON.stringify(atom)}`);
+  }
+  declaredAtoms.add(atom.name);
+}
+
+for (const composite of registry.composites) {
+  if (!composite.name || !composite.category || !composite.version || !Array.isArray(composite.dependsOn)) {
+    throw new Error(`invalid composite entry: ${JSON.stringify(composite)}`);
+  }
+  declaredComposites.add(composite.name);
+  composite.dependsOn.forEach((dependency) => dependencyNames.add(dependency));
+}
+
+for (const pipeline of registry.pipelines) {
+  if (!pipeline.name || !pipeline.version || !Array.isArray(pipeline.dependsOn)) {
+    throw new Error(`invalid pipeline entry: ${JSON.stringify(pipeline)}`);
+  }
+  declaredPipelines.add(pipeline.name);
+  pipeline.dependsOn.forEach((dependency) => dependencyNames.add(dependency));
+}
+
+for (const dependency of dependencyNames) {
+  if (!declaredAtoms.has(dependency) && !declaredComposites.has(dependency) && !declaredPipelines.has(dependency)) {
+    throw new Error(`registry dependency is not declared: ${dependency}`);
+  }
+}
+
+function collectLeafDirs(baseRelative, expectedDepth) {
   const base = path.join(skillsDir, baseRelative);
   const output = [];
 
-  function walk(current, depth) {
+  function walk(current) {
     for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
       if (!entry.isDirectory()) continue;
       const fullPath = path.join(current, entry.name);
       const relPath = path.relative(skillsDir, fullPath).replace(/\\/g, '/');
-      const relDepth = relPath.split('/').length;
-      if (relDepth >= minDepth && relDepth <= maxDepth) {
+      const depth = relPath.split('/').length;
+      if (depth === expectedDepth) {
         output.push(relPath);
-      }
-      if (relDepth < maxDepth) {
-        walk(fullPath, depth + 1);
+      } else if (depth < expectedDepth) {
+        walk(fullPath);
       }
     }
   }
 
   if (fs.existsSync(base)) {
-    walk(base, 1);
+    walk(base);
   }
   return output;
 }
 
-const actual = new Set([
-  ...collectDirs('atoms', 3, 3),
-  ...collectDirs('composites', 3, 3),
-  ...collectDirs('pipelines', 2, 2),
-]);
+const actualAtoms = new Set(collectLeafDirs('atoms', 3));
+const actualComposites = new Set(collectLeafDirs('composites', 3));
+const actualPipelines = new Set(collectLeafDirs('pipelines', 2));
 
-const missing = [...registered].filter((item) => !actual.has(item)).sort();
-const extra = [...actual].filter((item) => !registered.has(item)).sort();
+const declaredAtomPaths = new Set(registry.atoms.map((item) => `atoms/${item.category}/${item.name}`));
+const declaredCompositePaths = new Set(registry.composites.map((item) => `composites/${item.category}/${item.name}`));
+const declaredPipelinePaths = new Set(registry.pipelines.map((item) => `pipelines/${item.name}`));
 
-if (missing.length > 0) {
-  throw new Error(`registry declares missing directories:\n${missing.join('\n')}`);
+function diff(expected, actual, label) {
+  const missing = [...expected].filter((item) => !actual.has(item)).sort();
+  const extra = [...actual].filter((item) => !expected.has(item)).sort();
+  if (missing.length > 0) {
+    throw new Error(`${label} declares missing directories:\n${missing.join('\n')}`);
+  }
+  if (extra.length > 0) {
+    throw new Error(`${label} has undeclared directories:\n${extra.join('\n')}`);
+  }
 }
-if (extra.length > 0) {
-  throw new Error(`directories exist but are not declared in registry:\n${extra.join('\n')}`);
+
+diff(declaredAtomPaths, actualAtoms, 'atom registry');
+diff(declaredCompositePaths, actualComposites, 'composite registry');
+diff(declaredPipelinePaths, actualPipelines, 'pipeline registry');
+
+if (!registry.capabilityRefs || !registry.capabilityRefs.matrix || !registry.capabilityRefs.fallbacks) {
+  throw new Error('registry missing capabilityRefs.matrix or capabilityRefs.fallbacks');
+}
+
+for (const ref of Object.values(registry.capabilityRefs)) {
+  const target = path.join(root, ref);
+  if (!fs.existsSync(target)) {
+    throw new Error(`registry capability reference not found: ${ref}`);
+  }
 }
 
 console.log('registry validation passed');

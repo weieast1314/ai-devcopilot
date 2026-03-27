@@ -202,15 +202,17 @@ AI 应先输出计划，并等待你回复：
 ### 分支命名
 
 ```text
-feature/{issue-id}-{description}
+feat/{issue-id}-{description}
 fix/{issue-id}-{description}
 hotfix/{issue-id}-{description}
+refactor/{issue-id}-{description}
 ```
 
 示例：
-- `feature/23181-ai-classification`
+- `feat/23181-ai-classification`
 - `fix/23182-null-pointer`
 - `hotfix/23199-login-timeout`
+- `refactor/23210-cleanup-auth-flow`
 
 ### 提交信息
 
@@ -265,7 +267,7 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1 -TargetProject . -Editor 
 直接告诉 AI 当前状态，例如：
 
 ```text
-继续刚才的任务：当前分支 feature/23181-login，计划已确认，继续执行 Service 和验证
+继续刚才的任务：当前分支 feat/23181-login，计划已确认，继续执行 Service 和验证
 ```
 
 更多问题请查看 `TEAM-FAQ.md`。

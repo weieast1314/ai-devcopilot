@@ -55,10 +55,10 @@ triggers:
 | 特性 | Dev Flow | Hotfix Flow |
 |------|----------|-------------|
 | 分支类型 | feat/* | hotfix/* |
-| 基分支 | main/dev | uat/prod |
+| 基分支 | `main` 或团队约定稳定分支 | 最接近生产的稳定分支 |
 | 计划生成 | 完整计划 | 简化计划（待确认） |
 | 代码审查 | 必须 | 可选 |
-| 部署目标 | dev/test | prod |
+| 部署目标 | 集成环境 / 测试环境 | 生产环境 |
 | 审批流程 | 常规 | 紧急通道 |
 
 ## 阶段详情
@@ -100,7 +100,7 @@ triggers:
 
 | 步骤 | Skill | 说明 |
 |------|-------|------|
-| 2.1 | `requirement-to-branch` | 从 uat/prod 创建热修复分支 |
+| 2.1 | `requirement-to-branch` | 从最接近生产的稳定分支创建热修复分支 |
 | 2.2 | `executing-plans` | 执行简化修复方案 |
 
 ```
@@ -109,7 +109,7 @@ triggers:
 ═══════════════════════════════════════════
 
 [requirement-to-branch]
-✓ 从 uat 创建: hotfix/23182-login_token
+✓ 从稳定基线分支创建: hotfix/23182-login_token
 
 [修复方案摘要]
 ✓ 根因判断: token 过期时间校验异常

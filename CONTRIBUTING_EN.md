@@ -47,7 +47,7 @@ If you find a bug or have a feature suggestion, please submit it through the fol
    ```
 3. **Create Feature Branch**:
    ```bash
-   git checkout -b feature/your-feature-name
+   git checkout -b feat/your-feature-name
    ```
 4. **Make Changes and Test**
 5. **Commit Changes**:
@@ -57,7 +57,7 @@ If you find a bug or have a feature suggestion, please submit it through the fol
    ```
 6. **Push to Your Fork**:
    ```bash
-   git push origin feature/your-feature-name
+   git push origin feat/your-feature-name
    ```
 7. **Create Pull Request**
 
@@ -77,7 +77,9 @@ Documentation contributions are equally important! You can improve documentation
 | Tool | Version Requirement | Installation |
 |------|---------------------|--------------|
 | Git | 2.x+ | [Install Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) |
-| Bash | 4.x+ | Built-in on macOS/Linux, used for shell validation scripts |
+| Bash | 4.x+ | Built-in on macOS/Linux; Git Bash is recommended on Windows |
+| Node.js | 18.x+ | Required for `check-registry.sh` and `check-install-targets.sh` |
+| jq (optional) | 1.6+ | Improves parsing in `build-dist.sh` and `validate-dist.sh` |
 | PowerShell | 5.1+ | Built-in on Windows, used for `install.ps1` |
 | AI Editor | Claude/CodeBuddy/OpenCode | Install corresponding editor |
 
@@ -230,26 +232,26 @@ Fixes #456
 ### Branch Naming Convention
 
 ```
-feature/{issue-id}-{description}   # New feature
+feat/{issue-id}-{description}      # New feature
 fix/{issue-id}-{description}       # Bug fix
 hotfix/{issue-id}-{description}    # Emergency fix
+refactor/{issue-id}-{description}  # Refactoring
 docs/{description}                 # Documentation update
-refactor/{description}             # Refactoring
-test/{description}                 # Testing related
+chore/{description}                # Tooling or configuration maintenance
 ```
 
 Examples:
-- `feature/123-add-docker-support`
+- `feat/123-add-docker-support`
 - `fix/456-install-path-error`
 - `docs/update-readme`
 
 ### Branch Strategy
 
-- `main`: Stable version branch
-- `develop`: Development branch
-- `feature/*`: Feature branches
+- `main` or the team-agreed stable baseline branch: stable code
+- `feat/*`: Feature branches
 - `fix/*`: Fix branches
 - `hotfix/*`: Emergency fix branches
+- `refactor/*`: Refactoring branches
 
 ## Pull Request Process
 

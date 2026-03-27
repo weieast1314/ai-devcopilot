@@ -30,16 +30,16 @@
 - 完整的安装脚本和配置模板
 
 ### 技能体系
-- `feishu-doc-to-branch`: 飞书文档转分支
-- `git-new-branch`: 智能分支创建
+- `entry-router`: 统一入口路由
+- `requirement-fetch`: 多来源需求获取
+- `requirement-to-branch`: 需求转分支
 - `writing-plans`: 计划模式
 - `executing-plans`: 计划执行
-- `verification`: 代码验证
-- `finish-branch`: 一键交付
-- `jenkins-deploy`: Jenkins 部署
+- `code-verification`: 代码验证
+- `code-delivery`: 代码交付
+- `jenkins-trigger`: Jenkins 部署触发
 - `nacos-config`: Nacos 配置管理
 - `code-review`: 代码审查
-- `pr-create`: PR 创建
 
 ### 文档
 - 详细的使用教程
@@ -83,4 +83,4 @@ git pull
 
 ---
 
-**最后更新**: 2026-03-19
+**最后更新**: 2026-03-27

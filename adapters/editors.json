@@ -23,6 +23,7 @@
     "globalEnvFile": "~/.ai-devcopilot/env.sh",
     "projectConfigDir": ".ai-devcopilot",
     "projectEnvFile": ".ai-devcopilot/env.sh",
-    "projectMemoryDir": ".ai-devcopilot/memory"
+    "projectMemoryDir": ".ai-devcopilot/memory",
+    "projectStateDir": ".ai-devcopilot/state"
   }
 }

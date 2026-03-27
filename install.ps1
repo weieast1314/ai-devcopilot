@@ -15,13 +15,15 @@ $DistDir = Join-Path $ScriptDir 'dist'
 $AdaptersDir = Join-Path $ScriptDir 'adapters'
 $EditorManifestPath = Join-Path $AdaptersDir 'editors.json'
 $TemplateFile = Join-Path $ScriptDir 'env.sh.template'
-$Version = '2.0.0'
+$Version = '1.3.0'
 
 $GlobalConfigDir = Join-Path $HOME '.ai-devcopilot'
 $EnvFile = Join-Path $GlobalConfigDir 'env.sh'
 $ProjectConfigDirRel = '.ai-devcopilot'
 $ProjectEnvFileRel = '.ai-devcopilot/env.sh'
 $ProjectMemoryDirRel = '.ai-devcopilot/memory'
+$ProjectStateDirRel = '.ai-devcopilot/state'
+$FlowStateTemplate = Join-Path $ScriptDir 'templates/flow-state.template.json'
 
 function Expand-HomePath {
     param([string]$RawPath)
@@ -221,6 +223,7 @@ function Show-InstallPlan {
     Write-Host "    - Global env:       $EnvFile"
     Write-Host "    - Project env:      $ProjectEnvFileRel"
     Write-Host "    - Project memory:   $ProjectMemoryDirRel"
+    Write-Host "    - Flow state:       $ProjectStateDirRel/flow-state.json"
 }
 
 function Copy-DirectoryContents {
@@ -581,6 +584,12 @@ if (Test-Path $projectEnvFile) {
 
 New-Item -ItemType Directory -Path $projectMemoryDir -Force | Out-Null
 Write-Host "      OK: created $ProjectMemoryDirRel/"
+New-Item -ItemType Directory -Path $projectStateDir -Force | Out-Null
+Write-Host "      OK: created $ProjectStateDirRel/"
+if ((Test-Path $FlowStateTemplate) -and -not (Test-Path $projectStateFile)) {
+    Copy-Item -Path $FlowStateTemplate -Destination $projectStateFile
+    Write-Host "      OK: initialized $ProjectStateDirRel/flow-state.json"
+}
 Write-Host ''
 
 Write-Host '[5/5] Global env config' -ForegroundColor Yellow
@@ -694,8 +703,9 @@ Write-Host ''
 Write-Host "Global env:   $EnvFile"
 Write-Host "Project env:  $ProjectEnvFileRel"
 Write-Host "Project data: $ProjectMemoryDirRel/"
+Write-Host "Flow state:   $ProjectStateDirRel/flow-state.json"
 Write-Host ''
 Write-Host 'Next steps:'
 Write-Host '  1. Restart the AI editor'
-Write-Host "  2. Run /dev-flow or 'start development' in the chat"
-Write-Host '  3. Supported triggers: /dev-flow, /hotfix, Feishu links'
+Write-Host "  2. Run '开始开发' or /dev in the chat"
+Write-Host '  3. Recommended triggers: 开始开发 / /dev, 热修复 / /hotfix, Feishu links'
