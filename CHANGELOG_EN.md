@@ -51,7 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Tools
 - Installation script (`install.sh`)
 - Demo script (`demo.sh`)
-- Configuration templates (`env.sh.template`, `team-env.template`)
+- Configuration templates (`env.sh.template`)
 - Plan and PR templates
 
 ## [1.0.0] - 2026-03-13

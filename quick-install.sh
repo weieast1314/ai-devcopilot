@@ -18,9 +18,7 @@ NC='\033[0m'
 REPO_URL="https://github.com/weieast1314/ai-devcopilot.git"
 INSTALL_DIR="$HOME/ai-devcopilot"
 
-echo -e "${CYAN}╔════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${CYAN}║           AI DevCopilot 快捷安装程序                        ║${NC}"
-echo -e "${CYAN}╚════════════════════════════════════════════════════════════╝${NC}"
+echo -e "${CYAN}--- AI DevCopilot 快捷安装程序 ---${NC}"
 echo ""
 
 # --- 检查依赖 ---
@@ -110,9 +108,7 @@ echo -e "  ${GREEN}✓${NC} 下载完成"
 echo ""
 
 # --- 打印安装命令 ---
-echo -e "${GREEN}════════════════════════════════════════════════════════════${NC}"
-echo -e "${GREEN}  下载完成！请复制以下命令执行安装：${NC}"
-echo -e "${GREEN}════════════════════════════════════════════════════════════${NC}"
+echo -e "${GREEN}--- 下载完成！请复制以下命令执行安装：---${NC}"
 echo ""
 echo -e "  ${CYAN}cd $INSTALL_DIR && ./install.sh${NC}"
 echo ""

@@ -93,8 +93,7 @@ cd ai-devcopilot
 # 安装到本地编辑器（开发模式）
 ./install.sh -e claude
 
-# 生成并校验多编辑器产物
-bash scripts/build-dist.sh
+# 校验安装链路与产物一致性
 bash scripts/validate-dist.sh
 bash scripts/check-registry.sh
 bash scripts/check-install-targets.sh

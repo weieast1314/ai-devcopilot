@@ -159,6 +159,4 @@ AI:   [提交、推送，并按选择执行交付]
 ## 7. 相关文档
 
 - 完整使用说明：`README.md`
-- 团队快速入门：`TEAM-QUICKSTART.md`
-- 常见问题：`TEAM-FAQ.md`
 - 完整流程示例：`examples/full-workflow-example.md`

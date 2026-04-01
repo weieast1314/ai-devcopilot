@@ -50,7 +50,7 @@
 ### 工具
 - 安装脚本 (`install.sh`)
 - 演示脚本 (`demo.sh`)
-- 配置模板 (`env.sh.template`, `team-env.template`)
+- 配置模板 (`env.sh.template`)
 - 计划和 PR 模板
 
 ## [1.0.0] - 2026-03-13

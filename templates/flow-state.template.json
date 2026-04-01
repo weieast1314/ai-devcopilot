@@ -8,6 +8,7 @@
   "context": {
     "branch": null,
     "requirement": null,
+    "planPath": null,
     "planSummary": null,
     "notes": []
   }

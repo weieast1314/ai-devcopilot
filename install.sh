@@ -66,11 +66,27 @@ resolve_skills_source() {
     editor_id=$(normalize_editor_id "$1")
     dist_source=$(get_dist_skills_source "$editor_id")
 
+    # 优先使用已存在的 dist
     if [ -d "$dist_source" ]; then
         echo "$dist_source"
         return 0
     fi
 
+    # dist 不存在，尝试自动构建
+    if [ -f "$BUILD_DIST_SCRIPT" ]; then
+        echo -e "${YELLOW}      ⚙ 正在构建 dist 产物...${NC}" >&2
+        if bash "$BUILD_DIST_SCRIPT" --editor "$editor_id" >/dev/null 2>&1; then
+            if [ -d "$dist_source" ]; then
+                echo -e "${GREEN}      ✓ 构建完成${NC}" >&2
+                echo "$dist_source"
+                return 0
+            fi
+        else
+            echo -e "${YELLOW}      ⚠ 构建失败，尝试使用源目录${NC}" >&2
+        fi
+    fi
+
+    # 回退到源目录
     if [ -d "$LEGACY_SKILLS_SOURCE" ]; then
         echo "$LEGACY_SKILLS_SOURCE"
         return 0
@@ -536,6 +552,8 @@ DEFAULT_J_TEST="${PROJ_NAME}-test"
 AI_DEVCOPILOT_DIR="$TARGET_PROJECT/$PROJECT_CONFIG_DIR_REL"
 AI_DEVCOPILOT_FILE="$TARGET_PROJECT/$PROJECT_ENV_FILE_REL"
 AI_DEVCOPILOT_MEMORY_DIR="$TARGET_PROJECT/$PROJECT_MEMORY_DIR_REL"
+AI_DEVCOPILOT_STATE_DIR="$TARGET_PROJECT/$PROJECT_STATE_DIR_REL"
+AI_DEVCOPILOT_STATE_FILE="$TARGET_PROJECT/$PROJECT_STATE_DIR_REL/flow-state.json"
 mkdir -p "$AI_DEVCOPILOT_DIR"
 
 if [ -f "$AI_DEVCOPILOT_FILE" ]; then

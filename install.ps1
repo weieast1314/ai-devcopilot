@@ -174,10 +174,27 @@ function Resolve-SkillsSource {
     param([string]$EditorId)
 
     $distSource = Get-DistSkillsSource $EditorId
+
+    # 优先使用已存在的 dist
     if (Test-Path $distSource) {
         return $distSource
     }
 
+    # dist 不存在，尝试自动构建
+    $buildScript = Join-Path $ScriptDir 'scripts/build-dist.sh'
+    if (Test-Path $buildScript) {
+        Write-Host "      Building dist artifacts..." -ForegroundColor Yellow
+        $editorIdNormalized = Normalize-EditorId $EditorId
+        $result = & bash $buildScript --editor $editorIdNormalized 2>&1
+        if ($LASTEXITCODE -eq 0 -and (Test-Path $distSource)) {
+            Write-Host "      Build completed" -ForegroundColor Green
+            return $distSource
+        } else {
+            Write-Host "      Build failed, trying source directory" -ForegroundColor Yellow
+        }
+    }
+
+    # 回退到源目录
     if (Test-Path $LegacySkillsSource) {
         return $LegacySkillsSource
     }
@@ -562,6 +579,8 @@ $defaultJenkinsJobTest = "$projectName-test"
 $projectConfigDir = Join-Path $resolvedProject $ProjectConfigDirRel
 $projectEnvFile = Join-Path $resolvedProject $ProjectEnvFileRel
 $projectMemoryDir = Join-Path $resolvedProject $ProjectMemoryDirRel
+$projectStateDir = Join-Path $resolvedProject $ProjectStateDirRel
+$projectStateFile = Join-Path $projectStateDir 'flow-state.json'
 
 Write-Host '[4/5] Project config' -ForegroundColor Yellow
 New-Item -ItemType Directory -Path $projectConfigDir -Force | Out-Null

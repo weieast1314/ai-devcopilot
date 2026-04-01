@@ -38,7 +38,9 @@ vendor/
 target/
 build/
 
-# dist/ 为发布产物，需纳入版本控制，因此不在此忽略
+# 构建产物（安装时自动生成）
+dist/
+AI DevCopilot.md
 
 
 # 编译产物

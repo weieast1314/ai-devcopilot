@@ -540,7 +540,6 @@ export JENKINS_JOB_TEST="project-name-test"
 如果你在维护仓库本身，而不是日常使用技能，建议执行以下命令验证安装链路与产物一致性：
 
 ```bash
-bash scripts/build-dist.sh
 bash scripts/validate-dist.sh
 bash scripts/check-registry.sh
 bash scripts/check-install-targets.sh
@@ -570,8 +569,6 @@ A: 先检查对应编辑器的安装目录 `${EDITOR_HOME}/skills/ai-devcopilot/
 
 **Q: 切换编辑器需要重新配置吗？**  
 A: 一般不需要。重新运行安装脚本选择新编辑器即可；全局配置 `~/.ai-devcopilot/env.sh` 会继续复用。
-
-更多问题请查看 [团队常见问题 FAQ](TEAM-FAQ.md)。
 
 ---
 
@@ -611,9 +608,7 @@ ai-devcopilot/
 ├── examples/                       # 使用示例
 ├── AI DevCopilot.md                # 默认 Agent 运行时产物（由构建脚本生成）
 ├── install.sh                      # 安装脚本
-├── README.md                       # 项目说明
-├── TEAM-QUICKSTART.md              # 团队快速入门
-└── TEAM-FAQ.md                     # 团队常见问题
+└── README.md                       # 项目说明
 ```
 
 ---
@@ -621,7 +616,7 @@ ai-devcopilot/
 ## 维护者提示
 
 - `core/agent/AI DevCopilot.source.md` 与 `skills/ai-devcopilot/` 是主要维护源，请优先修改这里。
-- `dist/` 与根目录 `AI DevCopilot.md` 属于构建产物，不建议手工编辑；修改源文件后请执行 `bash scripts/build-dist.sh`。
+- `dist/` 与根目录 `AI DevCopilot.md` 属于构建产物，安装时自动生成，无需手动构建。
 - 提交前建议至少执行：`bash scripts/validate-dist.sh`、`bash scripts/check-registry.sh`、`bash scripts/check-install-targets.sh`、`bash scripts/smoke-dev-flow.sh`。
 
 ---

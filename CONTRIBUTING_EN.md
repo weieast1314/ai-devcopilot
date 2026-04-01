@@ -93,8 +93,7 @@ cd ai-devcopilot
 # Install to local editor (development mode)
 ./install.sh -e claude
 
-# Build and validate multi-editor artifacts
-bash scripts/build-dist.sh
+# Validate installation pipeline and artifact consistency
 bash scripts/validate-dist.sh
 bash scripts/check-registry.sh
 bash scripts/check-install-targets.sh

@@ -26,7 +26,8 @@ details: 详细需求内容
 ## 输出标准化
 
 ```yaml
-plan_document: 计划文档（由编辑器自动管理）
+plan_document: 计划文档内容
+plan_path: .ai-devcopilot/plans/{issue-id}-{title}.md
 task_count: 任务数量
 status: pending_confirmation
 ```
@@ -60,17 +61,22 @@ status: pending_confirmation
 
 ### 步骤 3: 生成计划文档
 
+**必须**使用 `write_to_file` 工具将计划保存到文件：
+
 ```
-═══════════════════════════════════════════
-📝 计划生成
-═══════════════════════════════════════════
+保存路径: .ai-devcopilot/plans/{issue-id}-{title}.md
+```
+
+**示例输出**:
+```
+--- 📝 计划生成 ---
 
 ✓ 需求标题: 用户登录
 ✓ Issue: #23181
 ✓ 任务数: 5
 
 📄 计划文档:
-   计划已生成（由编辑器自动管理）
+   📁 .ai-devcopilot/plans/23181-user-login.md
 
 📌 待确认:
    - 是否按当前技术方案实施
