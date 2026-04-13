@@ -141,12 +141,11 @@
         "requiredAll": [
           "file.read",
           "skill.superpowers.brainstorming",
-          "skill.superpowers.writing-plans"
-        ],
-        "optional": [
+          "skill.superpowers.writing-plans",
           "interaction.ask_followup",
           "state.persistence"
-        ]
+        ],
+        "optional": []
       },
       "executing-plans": {
         "requiredAll": [
@@ -154,32 +153,30 @@
           "file.write",
           "skill.superpowers.executing-plans",
           "skill.superpowers.test-driven-development",
-          "skill.superpowers.systematic-debugging"
+          "skill.superpowers.systematic-debugging",
+          "interaction.ask_followup"
         ],
         "optional": [
-          "shell.exec",
-          "interaction.ask_followup"
+          "shell.exec"
         ]
       },
       "code-verification": {
         "requiredAll": [
           "shell.exec",
           "skill.superpowers.verification-before-completion",
-          "skill.superpowers.code-review"
-        ],
-        "optional": [
+          "skill.superpowers.code-review",
           "code.review",
           "interaction.ask_followup"
-        ]
+        ],
+        "optional": []
       },
       "code-delivery": {
         "requiredAll": [
           "shell.exec",
-          "skill.superpowers.finishing-branch"
-        ],
-        "optional": [
+          "skill.superpowers.finishing-branch",
           "interaction.ask_followup"
-        ]
+        ],
+        "optional": []
       }
     },
     "atoms": {

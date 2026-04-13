@@ -12,16 +12,7 @@
         "userMessage": "当前环境缺少飞书 MCP 与网页抓取能力，无法自动读取飞书文档。请粘贴需求正文后继续。"
       }
     ],
-    "requirement-fetch": [
-      {
-        "whenMissing": [
-          "mcp.lark"
-        ],
-        "impact": "degraded",
-        "behavior": "fallback_to_web_fetch_or_manual_text",
-        "userMessage": "当前环境未启用飞书 MCP，将优先尝试网页抓取；若仍失败，请粘贴文档内容。"
-      }
-    ],
+    "requirement-fetch": [],
     "writing-plans": [
       {
         "whenMissing": [
@@ -36,17 +27,17 @@
         "whenMissing": [
           "interaction.ask_followup"
         ],
-        "impact": "degraded",
-        "behavior": "fallback_to_plain_text_confirmation",
-        "userMessage": "当前环境不支持结构化选项确认，将改为普通文本提示用户回复“确认计划，开始执行”。"
+        "impact": "blocking",
+        "behavior": "stop_and_require_interaction_capability",
+        "userMessage": "当前环境缺少交互确认能力，流程已阻断。请启用结构化选项确认功能后再继续。"
       },
       {
         "whenMissing": [
           "state.persistence"
         ],
-        "impact": "degraded",
-        "behavior": "keep_plan_in_current_session_only",
-        "userMessage": "当前环境不支持流程状态持久化，计划状态仅在当前会话内保留。"
+        "impact": "blocking",
+        "behavior": "stop_and_require_state_persistence",
+        "userMessage": "当前环境缺少状态持久化能力，流程已阻断。请启用状态持久化功能后再继续。"
       }
     ],
     "executing-plans": [
@@ -75,16 +66,16 @@
           "shell.exec"
         ],
         "impact": "blocking",
-        "behavior": "output_manual_verification_commands",
-        "userMessage": "当前环境无法执行构建或测试命令，将只输出建议的验证命令与检查清单。"
+        "behavior": "stop_and_require_shell_exec",
+        "userMessage": "当前环境缺少命令执行能力，流程已阻断。请启用 shell.exec 功能后再继续。"
       },
       {
         "whenMissing": [
           "code.review"
         ],
-        "impact": "degraded",
-        "behavior": "compile_and_test_only",
-        "userMessage": "当前环境缺少代码审查能力，将仅执行编译与测试验证。"
+        "impact": "blocking",
+        "behavior": "stop_and_require_code_review",
+        "userMessage": "当前环境缺少代码审查能力，流程已阻断。请启用代码审查功能后再继续。"
       }
     ],
     "code-delivery": [
@@ -102,16 +93,16 @@
           "shell.exec"
         ],
         "impact": "blocking",
-        "behavior": "output_manual_git_and_delivery_steps",
-        "userMessage": "当前环境无法执行 Git 与部署命令，将只输出提交、推送、Jenkins/PR 交付步骤。"
+        "behavior": "stop_and_require_shell_exec",
+        "userMessage": "当前环境缺少命令执行能力，流程已阻断。请启用 shell.exec 功能后再继续。"
       },
       {
         "whenMissing": [
           "interaction.ask_followup"
         ],
-        "impact": "degraded",
-        "behavior": "fallback_to_text_delivery_menu",
-        "userMessage": "当前环境不支持结构化交付方式选择，将改为普通文本菜单。"
+        "impact": "blocking",
+        "behavior": "stop_and_require_interaction_capability",
+        "userMessage": "当前环境缺少交互确认能力，流程已阻断。请启用结构化选项确认功能后再继续。"
       }
     ],
     "dev-flow": [
@@ -127,25 +118,25 @@
         "whenMissing": [
           "interaction.ask_followup"
         ],
-        "impact": "degraded",
-        "behavior": "fallback_to_plain_text_prompts",
-        "userMessage": "当前环境不支持结构化下一步选择，将使用普通文本继续引导流程。"
+        "impact": "blocking",
+        "behavior": "stop_and_require_interaction_capability",
+        "userMessage": "当前环境缺少交互确认能力，dev-flow 已阻断。请启用结构化选项确认功能后再继续。"
       },
       {
         "whenMissing": [
           "state.persistence"
         ],
-        "impact": "degraded",
-        "behavior": "session_only_state_tracking",
-        "userMessage": "当前环境不支持状态持久化，流程中断后需要用户手动说明上下文。"
+        "impact": "blocking",
+        "behavior": "stop_and_require_state_persistence",
+        "userMessage": "当前环境缺少状态持久化能力，dev-flow 已阻断。请启用状态持久化功能后再继续。"
       },
       {
         "whenMissing": [
           "shell.exec"
         ],
-        "impact": "partial_blocking",
-        "behavior": "stop_before_verification_and_delivery",
-        "userMessage": "当前环境无法执行本地命令，可继续完成计划与代码修改，但验证、Git 提交、推送与部署将改为输出手动命令。"
+        "impact": "blocking",
+        "behavior": "stop_and_require_shell_exec",
+        "userMessage": "当前环境缺少命令执行能力，dev-flow 已阻断。请启用 shell.exec 功能后再继续。"
       }
     ],
     "hotfix-flow": [
@@ -161,9 +152,9 @@
         "whenMissing": [
           "shell.exec"
         ],
-        "impact": "partial_blocking",
-        "behavior": "manual_hotfix_delivery_steps",
-        "userMessage": "当前环境无法执行本地命令，热修复方案可继续生成，但验证与交付需由用户手动执行。"
+        "impact": "blocking",
+        "behavior": "stop_and_require_shell_exec",
+        "userMessage": "当前环境缺少命令执行能力，hotfix-flow 已阻断。请启用 shell.exec 功能后再继续。"
       }
     ]
   }

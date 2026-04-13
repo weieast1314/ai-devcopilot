@@ -40,16 +40,23 @@
 └─────────────────────────────────────────┘
 ```
 
-### 2. 智能路由机制（强制 superpowers）
+### 2. 智能路由机制（强制 superpowers + 禁止降级）
 
 采用三层强制优先级路由：
 
 1. **会话级**：必须先调用 `using-superpowers` 完成能力预检。
 2. **项目级**：本项目任务必须经过 `entry-router` 进入 Pipeline。
-3. **阶段级**：计划/执行/验证/交付阶段必须使用 superpowers 对应过程型 Skill。
+3. **阶段级**：计划/执行/验证/交付阶段必须使用 superpowers 对应过程型 Skill，缺失时**阻断流程**。
+
+**禁止降级策略**：
+- 任何 superpowers 能力或辅助能力缺失时，流程**直接阻断**
+- 不提供降级方案或备选路径
+- 用户必须启用相应能力后才能继续
 
 ```
-用户输入 → using-superpowers(强制) → entry-router → Pipeline → Composite(superpowers 强制) → Atom
+用户输入 → using-superpowers(强制) → entry-router → Pipeline → Composite(强制 superpowers) → Atom
+         ↓
+    缺失能力 → 阻断 + 提示启用
 ```
 
 **路由规则：**
@@ -108,10 +115,11 @@
 
 在整个工作流中，必须严格遵守以下规则：
 
-### 规则 1：三层入口优先级
+### 规则 1：三层入口优先级 + 禁止降级
 - **会话级**：先调用 `using-superpowers` 进行过程型能力预检
 - **项目级**：本项目任务必须首先经过 `entry-router` 路由判断
 - **阶段级**：按阶段强制调用 `superpowers` 过程 Skill，缺失时必须阻断流程并提示启用 superpowers
+- **禁止降级**：任何辅助能力（交互确认、状态持久化、命令执行等）缺失时均阻断，不提供降级方案
 - **禁止**跳过 `entry-router` 直接调用原子层 Skill（如 `feishu-doc-fetch`）
 - 必须通过 Pipeline 流程正确执行
 
