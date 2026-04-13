@@ -41,21 +41,20 @@ triggers:
 │                                                              │
 │  阶段 2: 快速修复                                             │
 │  ├── requirement-to-branch (创建热修复分支)                   │
-│  └── executing-plans (执行修复)                               │
+│  └── superpowers: executing-plans + systematic-debugging     │
 │                                                              │
 │  阶段 3: 快速交付                                             │
-│  ├── code-verification (快速验证)                             │
-│  └── code-delivery (部署到生产)                               │
+│  └── superpowers: verification + finishing-branch            │
 │                                                              │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-> **架构说明**: Pipeline 只编排 Composites，Composites 编排 Atoms。清晰分层，职责明确。
+> **架构说明**: 基础 Composites 由 local 提供，过程型 Skills 由 superpowers 强制提供（缺失时阻断）。
 
 ## 与 Dev Flow 的区别
 
 | 特性 | Dev Flow | Hotfix Flow |
-|------|----------|-------------|
+:|------|----------|-------------|
 | 分支类型 | feat/* | hotfix/* |
 | 基分支 | `main` 或团队约定稳定分支 | 最接近生产的稳定分支 |
 | 计划生成 | 完整计划 | 简化计划（待确认） |
@@ -68,7 +67,7 @@ triggers:
 ### 阶段 1: 问题定位
 
 | 步骤 | Skill | 说明 |
-|------|-------|------|
+:|------|-------|------|
 | 1.1 | `requirement-fetch` | 问题获取，识别为热修复类型 |
 
 ```
@@ -99,9 +98,9 @@ triggers:
 ### 阶段 2: 快速修复
 
 | 步骤 | Skill | 说明 |
-|------|-------|------|
+:|------|-------|------|
 | 2.1 | `requirement-to-branch` | 从最接近生产的稳定分支创建热修复分支 |
-| 2.2 | `executing-plans` | 执行简化修复方案 |
+| 2.2 | `superpowers` | executing-plans + systematic-debugging（执行修复） |
 
 ```
 --- 🔥 阶段 2/3: 快速修复 ---
@@ -115,7 +114,7 @@ triggers:
 ✓ 执行步骤: 修复校验逻辑 → 补充回归验证
 ⏸️ 当前状态: 等待用户回复"确认修复，开始执行"
 
-[executing-plans]
+[superpowers: executing-plans + systematic-debugging]
 [1/2] 修复 Token 校验逻辑
       ✓ 修改文件: TokenService.java
       ✓ 验证结果: 单元测试通过
@@ -145,19 +144,19 @@ triggers:
 ### 阶段 3: 快速交付
 
 | 步骤 | Skill | 说明 |
-|------|-------|------|
-| 3.1 | `code-verification` | 快速验证（可选审查） |
-| 3.2 | `code-delivery` | 部署到生产环境 |
+:|------|-------|------|
+| 3.1 | `superpowers` | verification + code-review（快速验证） |
+| 3.2 | `superpowers` | finishing-branch（部署到生产） |
 
 ```
 --- 🔥 阶段 3/3: 快速交付 ---
 
-[code-verification]
+[superpowers: verification + code-review]
 ✓ 编译通过
 ✓ 核心功能测试通过
 ✓ 审查: 跳过（紧急修复）
 
-[code-delivery]
+[superpowers: finishing-branch]
 ✓ 已提交
 ✓ 已推送
 ✓ 已触发生产部署
@@ -186,17 +185,17 @@ triggers:
 
 AI: [自动触发 hotfix-flow]
     检测到紧急修复需求...
-    
+
     🔥 阶段 1: 问题定位 ✓
     📌 修复方案摘要已生成，等待确认
-    
+
 用户: 确认修复，开始执行
 
 AI: [按修复方案逐项执行]
     [1/2] 修复 Token 校验逻辑 ✓
     [2/2] 补充回归验证 ✓
     🔥 阶段 3: 快速交付 ✓
-    
+
     ✅ 热修复已完成，已部署到生产环境
 ```
 
@@ -207,7 +206,7 @@ AI: [按修复方案逐项执行]
 Hotfix Flow 依赖以下能力，缺失任何一项都将阻断流程：
 
 | 能力 | 用途 | 缺失行为 |
-|------|------|----------|
+:|------|------|----------|
 | `skill.superpowers.available` | 会话级能力预检 | 阻断 |
 | `skill.superpowers.executing-plans` | 修复执行 | 阻断 |
 | `skill.superpowers.test-driven-development` | 测试驱动开发 | 阻断 |
@@ -233,6 +232,5 @@ Hotfix Flow 依赖以下能力，缺失任何一项都将阻断流程：
 
 - [Requirement Fetch](../../composites/workflow/requirement-fetch/SKILL.md)
 - [Requirement to Branch](../../composites/workflow/requirement-to-branch/SKILL.md)
-- [Executing Plans](../../composites/workflow/executing-plans/SKILL.md)
-- [Code Verification](../../composites/workflow/code-verification/SKILL.md)
-- [Code Delivery](../../composites/workflow/code-delivery/SKILL.md)
+
+> **注意**: 修复/验证/交付阶段的能力由 superpowers 强制提供，详见上方"能力依赖（强制）"表格。

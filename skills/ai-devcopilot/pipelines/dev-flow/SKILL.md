@@ -42,19 +42,18 @@ triggers:
 │                                                              │
 │  阶段 2: 初始化                                               │
 │  ├── requirement-to-branch (需求转分支)                       │
-│  └── writing-plans (生成计划)                                 │
+│  └── superpowers: brainstorming + writing-plans             │
 │                                                              │
 │  阶段 3: 实现                                                 │
-│  └── executing-plans (执行计划)                               │
+│  └── superpowers: executing-plans + systematic-debugging      │
 │                                                              │
 │  阶段 4: 交付                                                 │
-│  ├── code-verification (代码验证)                             │
-│  └── code-delivery (代码交付)                                 │
+│  └── superpowers: verification + code-review + finishing    │
 │                                                              │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-> **架构说明**: Pipeline 只编排 Composites，Composites 编排 Atoms。清晰分层，职责明确。
+> **架构说明**: 基础 Composites 由 local 提供，过程型 Skills 由 superpowers 强制提供（缺失时阻断）。
 
 ## 阶段详情
 
@@ -63,7 +62,7 @@ triggers:
 **目标**: 从不同来源获取并标准化需求信息
 
 | 步骤 | Skill | 说明 |
-|------|-------|------|
+:|------|-------|------|
 | 1.1 | `requirement-fetch` | 多来源需求获取，输出标准化需求 |
 
 **输出**:
@@ -103,9 +102,9 @@ triggers:
 **目标**: 创建开发分支并生成执行计划
 
 | 步骤 | Skill | 说明 |
-|------|-------|------|
+:|------|-------|------|
 | 2.1 | `requirement-to-branch` | 需求转分支 |
-| 2.2 | `writing-plans` | 生成执行计划文档 |
+| 2.2 | `superpowers` | brainstorming + writing-plans（生成执行计划） |
 
 **输出**:
 - 开发分支
@@ -117,7 +116,7 @@ triggers:
 [requirement-to-branch]
 ✓ 分支: feat/23181-ai-classification
 
-[writing-plans]
+[superpowers: brainstorming + writing-plans]
 ✓ 计划: 计划文档已生成（由编辑器自动管理）
 ✓ 任务数: 5
 ✓ 待确认: 技术方案 / 任务顺序 / 影响范围
@@ -145,8 +144,8 @@ triggers:
 **目标**: 按计划执行代码修改
 
 | 步骤 | Skill | 说明 |
-|------|-------|------|
-| 3.1 | `executing-plans` | 按计划执行代码修改 |
+:|------|-------|------|
+| 3.1 | `superpowers` | executing-plans + systematic-debugging（按计划执行） |
 
 **输出**:
 - 完成的任务列表
@@ -155,7 +154,7 @@ triggers:
 ```
 --- 📋 阶段 3/4: 实现 ---
 
-[executing-plans]
+[superpowers: executing-plans]
 [1/5] 创建 Entity/POJO
       ✓ 已完成
       ✓ 修改文件: AiClassificationEntity.java
@@ -193,9 +192,9 @@ triggers:
 **目标**: 验证代码并完成交付
 
 | 步骤 | Skill | 说明 |
-|------|-------|------|
-| 4.1 | `code-verification` | 编译+测试+审查 |
-| 4.2 | `code-delivery` | 提交+推送+部署 |
+:|------|-------|------|
+| 4.1 | `superpowers` | verification + code-review（验证与审查） |
+| 4.2 | `superpowers` | finishing-branch（提交+推送+部署） |
 
 **输出**:
 - 验证结果
@@ -204,12 +203,12 @@ triggers:
 ```
 --- 📋 阶段 4/4: 交付 ---
 
-[code-verification]
+[superpowers: verification + code-review]
 ✓ 编译通过
 ✓ 测试通过
 ✓ 审查完成
 
-[code-delivery]
+[superpowers: finishing-branch]
 ✓ 已提交
 ✓ 已推送
 ✓ 已部署到 dev 环境
@@ -260,7 +259,7 @@ AI: [自动触发 dev-flow]
 Dev Flow 依赖以下能力，缺失任何一项都将阻断流程：
 
 | 能力 | 用途 | 缺失行为 |
-|------|------|----------|
+:|------|------|----------|
 | `skill.superpowers.available` | 会话级能力预检 | 阻断 |
 | `skill.superpowers.brainstorming` | 计划阶段 brainstorming | 阻断 |
 | `skill.superpowers.writing-plans` | 计划阶段 plan 生成 | 阻断 |
@@ -300,7 +299,5 @@ Dev Flow 依赖以下能力，缺失任何一项都将阻断流程：
 
 - [Requirement Fetch](../../composites/workflow/requirement-fetch/SKILL.md)
 - [Requirement to Branch](../../composites/workflow/requirement-to-branch/SKILL.md)
-- [Writing Plans](../../composites/workflow/writing-plans/SKILL.md)
-- [Executing Plans](../../composites/workflow/executing-plans/SKILL.md)
-- [Code Verification](../../composites/workflow/code-verification/SKILL.md)
-- [Code Delivery](../../composites/workflow/code-delivery/SKILL.md)
+
+> **注意**: 计划/执行/验证/交付阶段的能力由 superpowers 强制提供，详见上方"能力依赖（强制）"表格。
