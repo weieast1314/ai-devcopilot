@@ -48,13 +48,183 @@
 ## 🚀 Features
 
 - **🔄 Full Process Automation**: One-stop solution from requirements acquisition to deployment verification
+- **🧠 Intelligent Input Detection**: Automatically identifies Feishu links or text descriptions and routes to the appropriate flow
+- **📦 Pipeline Architecture**: Fine-grained Skill classification with independent upgrades and flexible orchestration
 - **📄 Feishu Document Integration**: Start development tasks directly from Feishu document links
+- **📝 Plain Text Requirement Support**: Enter requirement descriptions directly to start development
 - **🧠 Intelligent Planning Mode**: AI automatically generates detailed implementation plans
 - **🔧 Multi-Editor Support**: Supports mainstream AI editors like Claude, CodeBuddy, OpenCode
 - **🔒 Secure Configuration**: Dual-layer configuration architecture separating sensitive info from project config
 - **👥 Team Collaboration**: Unified branch naming and commit message conventions
 - **🚀 One-Click Deployment**: Integrated Jenkins automatic build and deployment
-- **📊 Nacos Configuration Management**: Supports remote configuration viewing and updating
+
+---
+
+## 🏗 Architecture Design
+
+AI DevCopilot uses a **Pipeline Architecture** to achieve fine-grained Skill classification and flexible orchestration:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                   Pipeline  Flow Layer                    │
+│  Easy to trigger, defines complete E2E workflow           │
+│  Examples: dev-flow, hotfix-flow                         │
+└─────────────────────────────────────────────────────────┘
+                        │
+        ┌───────────────┼───────────────┐
+        ▼               ▼               ▼
+┌─────────────────┐ ┌──────────┐ ┌─────────────────────┐
+│  Composites     │ │  Atoms   │ │  Superpowers        │
+│  Combination    │ │  Atomic  │ │  Process (Mandatory)│
+├─────────────────┤ ├──────────┤ ├─────────────────────┤
+│ Encapsulates    │ │ Smallest │ │ brainstorming      │
+│ common flows    │ │ reusable │ │ writing-plans      │
+│ combines atoms  │ │ unit     │ │ executing-plans     │
+│                 │ │          │ │ verification        │
+│ requirement-   │ │ input-   │ │ code-review        │
+│   fetch        │ │   detect │ │ ...                 │
+│ requirement-    │ │ feishu-  │ │                     │
+│   to-branch    │ │   doc-   │ │                     │
+│                │ │   fetch  │ │                     │
+└─────────────────┘ └──────────┘ └─────────────────────┘
+```
+
+### Intelligent Routing Mechanism
+
+```
+User Input → entry-router (Entry Router)
+              ├── Feishu link / New requirement / Dev command → dev-flow → requirement-fetch
+              └── Hotfix / Urgent fix / Production issue → hotfix-flow → requirement-fetch
+```
+
+### Structural Coordination with Superpowers
+
+To avoid flow conflicts, the project adopts a "three-layer priority" coordination strategy:
+
+1. **Session Level (Method Layer)**: Call `using-superpowers` first for available capability pre-check.
+2. **Project Level (Orchestration Layer)**: All project tasks must first be routed through `entry-router` to `dev-flow` / `hotfix-flow`.
+3. **Stage Level (Execution Layer)**: Plan, Execute, Verify, Delivery stages force the use of `superpowers` process Skills; flow is blocked if unavailable.
+
+Stage Mapping (Mandatory):
+
+| Stage | Mandatory Superpowers |
+|-------|----------------------|
+| Plan | `brainstorming` / `writing-plans` |
+| Execute | `executing-plans` / `systematic-debugging` |
+| Verify | `verification-before-completion` / `requesting-code-review` |
+| Delivery | `finishing-a-development-branch` |
+
+---
+
+## 🔄 Workflow Diagram
+
+### Complete Flow Overview
+
+```mermaid
+flowchart TB
+    subgraph Entry Layer
+        User[User Input] --> EntryRouter[entry-router<br/>Entry Router]
+    end
+
+    subgraph Routing Decision
+        EntryRouter --> Detect{Detect Input Type}
+        Detect -->|Feishu link/New requirement/Dev command| DevTrigger[Trigger dev-flow]
+        Detect -->|Hotfix/Urgent fix/Production issue| HotfixTrigger[Trigger hotfix-flow]
+    end
+
+    subgraph DevFlow["Dev Flow (Standard Development)"]
+        subgraph Stage1["Stage 1: Requirement Acquisition"]
+            RF1[requirement-fetch<br/>Multi-source requirement fetch]
+        end
+
+        subgraph Stage2["Stage 2: Initialization"]
+            RTB1[requirement-to-branch<br/>Requirement to branch]
+            WP[superpowers<br/>brainstorming + writing-plans]
+            Pause1[⏸️ Pause for confirmation]
+        end
+
+        subgraph Stage3["Stage 3: Implementation"]
+            EP1[superpowers<br/>executing-plans + systematic-debugging]
+            Report1[Report progress per item]
+        end
+
+        subgraph Stage4["Stage 4: Delivery"]
+            CV1[superpowers<br/>verification + code-review]
+            CD1[superpowers<br/>finishing-branch]
+        end
+
+        RF1 --> RTB1 --> WP --> Pause1
+        Pause1 -->|User confirms: 确认计划,开始执行| EP1
+        EP1 --> Report1 --> CV1 --> CD1
+    end
+
+    subgraph HotfixFlow["Hotfix Flow (Hotfix Process)"]
+        subgraph HStage1["Stage 1: Problem定位"]
+            RF2[requirement-fetch<br/>Problem acquisition]
+        end
+
+        subgraph HStage2["Stage 2: Quick Fix"]
+            RTB2[requirement-to-branch<br/>Create hotfix branch]
+            FixSummary[Output fix summary]
+            Pause2[⏸️ Pause for confirmation]
+            EP2[superpowers<br/>executing-plans + systematic-debugging]
+        end
+
+        subgraph HStage3["Stage 3: Quick Delivery"]
+            CV2[superpowers<br/>verification + code-review]
+            CD2[superpowers<br/>finishing-branch]
+        end
+
+        RF2 --> RTB2 --> FixSummary --> Pause2
+        Pause2 -->|User confirms: 确认修复,开始执行| EP2
+        EP2 --> CV2 --> CD2
+    end
+
+    DevTrigger --> RF1
+    HotfixTrigger --> RF2
+
+    CD1 --> Done1[✅ Flow Complete]
+    CD2 --> Done2[✅ Hotfix Complete]
+
+    style EntryRouter fill:#e1f5fe
+    style DevTrigger fill:#c8e6c9
+    style HotfixTrigger fill:#ffcdd2
+    style Pause1 fill:#fff9c4
+    style Pause2 fill:#fff9c4
+```
+
+### Architecture Layer Overview
+
+```mermaid
+flowchart LR
+    subgraph Architecture Layers
+        direction TB
+        L1[Pipeline Layer<br/>Flow Orchestration] --> L2[Composite Layer<br/>Base Combination] --> L3[Atom Layer<br/>Atomic Capability] --> L4[Superpowers Layer<br/>Process Capability(Mandatory)]
+    end
+
+    subgraph Examples
+        P[dev-flow] --> C1[requirement-fetch]
+        C1 --> A1[input-detect]
+        C1 --> A2[feishu-doc-fetch]
+        C1 --> A3[requirement-parse]
+        P --> SP[superpowers<br/>Stage capability]
+    end
+
+    style L1 fill:#bbdefb
+    style L2 fill:#c8e6c9
+    style L3 fill:#fff9c4
+    style L4 fill:#ffcdd2
+```
+
+### Core Constraint Summary
+
+| Constraint | Description |
+|------------|-------------|
+| **Entry Router First** | User input must first go through `entry-router`; direct Atom skill calls are prohibited |
+| **Plan Before Execute** | Plan must be generated first; code changes only after user confirmation |
+| **Execute Only Plan Items** | Implementation stage only executes planned tasks; scope expansion prohibited |
+| **Update Plan on Deviation** | On discovering gaps or deviations, update the plan before continuing |
+| **Report Per Item** | After completing each task, report status, modified files, and verification results |
 
 ---
 
@@ -352,6 +522,11 @@ export JENKINS_URL="http://jenkins.your-company.com"
 export JENKINS_USERNAME="your_name"
 export JENKINS_API_TOKEN="your_token"
 
+# Nacos Configuration (optional)
+export NACOS_SERVER_ADDR="your-nacos-server:8848"
+export NACOS_NAMESPACE="dev"
+export NACOS_GROUP="DEFAULT_GROUP"
+
 # Feishu Authentication (if using Feishu MCP)
 export LARK_APP_ID="cli_xxx"
 export LARK_APP_SECRET="xxx"
@@ -435,16 +610,29 @@ ai-devcopilot/
 │   └── opencode/                   # OpenCode runtime artifacts
 ├── skills/ai-devcopilot/           # Skills source directory (Pipeline architecture)
 │   ├── atoms/                      # Atomic skill layer
-│   │   ├── analysis/
-│   │   ├── devops/
-│   │   ├── feishu/
-│   │   ├── git/
-│   │   ├── memory/
-│   │   ├── planning/
-│   │   ├── review/
-│   │   └── verification/
+│   │   ├── analysis/               # Analysis: entry-router, input detection, requirement extraction/parsing
+│   │   │   ├── entry-router/
+│   │   │   ├── input-detect/
+│   │   │   ├── requirement-extract/
+│   │   │   └── requirement-parse/
+│   │   ├── devops/                 # DevOps: Jenkins, Nacos, SQL migration
+│   │   │   ├── jenkins-trigger/
+│   │   │   ├── nacos-config/
+│   │   │   └── sql-migration/
+│   │   ├── feishu/                 # Feishu: document fetching
+│   │   │   └── feishu-doc-fetch/
+│   │   ├── git/                    # Git: branch creation, validation
+│   │   │   ├── git-branch-create/
+│   │   │   └── git-branch-validate/
+│   │   └── memory/                 # Memory: update memory
+│   │       └── update-memory/
 │   ├── composites/                 # Composite skill layer
+│   │   └── workflow/               # Workflow combination
+│   │       ├── requirement-fetch/  # Multi-source requirement fetch
+│   │       └── requirement-to-branch/ # Requirement to branch
 │   ├── pipelines/                  # Pipeline layer
+│   │   ├── dev-flow/              # Standard development flow
+│   │   └── hotfix-flow/           # Hotfix flow
 │   └── registry/
 │       └── skills-registry.yml
 ├── templates/
@@ -454,12 +642,19 @@ ai-devcopilot/
 │   └── branch-completion-report.md
 ├── scripts/
 │   ├── build-dist.sh               # Generate multi-editor runtime artifacts
-│   └── validate-dist.sh            # Validate dist and default Agent artifact
+│   ├── validate-dist.sh            # Validate dist and default Agent artifact
+│   ├── check-registry.sh
+│   ├── check-install-targets.sh
+│   └── smoke-dev-flow.sh
 ├── examples/                       # Usage examples
 ├── AI DevCopilot.md                # Default Agent runtime artifact generated by the build script
-├── install.sh                      # Installation script
+├── install.sh                      # Installation script (macOS/Linux)
+├── install.ps1                     # Windows installation script
+├── quick-install.sh                # Quick installation script
+├── env.sh.template                # Environment configuration template
 ├── README.md                       # Project documentation (Chinese)
-└── README_EN.md                    # Project documentation (English)
+├── README_EN.md                    # Project documentation (English)
+└── AI 流程约束规则.md              # AI collaboration flow constraint rules
 ```
 
 ---
@@ -518,6 +713,6 @@ Thanks to all contributors who have helped with the AI DevCopilot project!
 
 ---
 
-**Version**: 1.3.0  
-**Last Updated**: 2026-03-27  
+**Version**: 1.5.0
+**Last Updated**: 2026-04-13
 **Maintainer**: weieast1314

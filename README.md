@@ -67,32 +67,26 @@
 AI DevCopilot 采用 **Pipeline 架构**，实现细粒度的 Skill 分类和灵活编排：
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                      Pipeline (流程)                         │
-│  一个易触发的名字，定义了完整的端到端工作流                      │
-│  触发词: /dev, /hotfix                                       │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                     Composites (组合 - 基础)                  │
-│  封装常用流程，组合多个原子 Skill                              │
-│  示例: requirement-fetch, requirement-to-branch              │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                      Atoms (原子)                            │
-│  最小粒度的可复用能力单元，支持独立升级替换                       │
-│  示例: input-detect, feishu-doc-fetch, git-branch-create    │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                  Superpowers (过程型 - 强制)                  │
-│  计划/执行/验证/交付阶段强制调用的过程型 Skills                │
-│  示例: brainstorming, writing-plans, executing-plans         │
-└─────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────�
+│                  Pipeline  流程层                     │
+│  易于触发，定义完整端到端工作流                         │
+│  示例: dev-flow, hotfix-flow                         │
+└──────────────────────────────────────────────────────┘
+                         │
+         ┌───────────────┼───────────────┐
+         ▼               ▼               ▼
+┌─────────────────┐ ┌─────────────┐ ┌─────────────────────┐
+│  Composites     │ │  Atoms      │ │  Superpowers       │
+│  组合层          │ │  原子层      │ │  过程型 (强制)       │
+├─────────────────┤ ├─────────────┤ ├─────────────────────┤
+│ 封装常用流程      │ │ 最小可复用   │ │ brainstorming      │
+│ 组合多个原子      │ │ 能力单元     │ │ writing-plans      │
+│                 │ │             │ │ executing-plans    │
+│ requirement-    │ │ input-     │ │ verification       │
+│   fetch         │ │   detect   │ │ code-review        │
+│ requirement-    │ │ feishu-    │ │ ...                │
+│   to-branch     │ │   doc-fetch│ │                    │
+└─────────────────┘ └─────────────┘ └─────────────────────┘
 ```
 
 ### 智能路由机制
@@ -142,23 +136,23 @@ flowchart TB
         subgraph Stage1["阶段1: 需求获取"]
             RF1[requirement-fetch<br/>多来源需求获取]
         end
-        
+
         subgraph Stage2["阶段2: 初始化"]
             RTB1[requirement-to-branch<br/>需求转分支]
             WP[superpowers<br/>brainstorming + writing-plans]
-            Pause1[⏸️ 暂停等待确认]
+            Pause1[II 暂停等待确认]
         end
-        
+
         subgraph Stage3["阶段3: 实现"]
             EP1[superpowers<br/>executing-plans + systematic-debugging]
             Report1[逐项汇报进度]
         end
-        
+
         subgraph Stage4["阶段4: 交付"]
             CV1[superpowers<br/>verification + code-review]
             CD1[superpowers<br/>finishing-branch]
         end
-        
+
         RF1 --> RTB1 --> WP --> Pause1
         Pause1 -->|用户确认: 确认计划,开始执行| EP1
         EP1 --> Report1 --> CV1 --> CD1
@@ -168,19 +162,19 @@ flowchart TB
         subgraph HStage1["阶段1: 问题定位"]
             RF2[requirement-fetch<br/>问题获取]
         end
-        
+
         subgraph HStage2["阶段2: 快速修复"]
             RTB2[requirement-to-branch<br/>创建热修复分支]
             FixSummary[输出修复摘要]
-            Pause2[⏸️ 暂停等待确认]
+            Pause2[II 暂停等待确认]
             EP2[superpowers<br/>executing-plans + systematic-debugging]
         end
-        
+
         subgraph HStage3["阶段3: 快速交付"]
             CV2[superpowers<br/>verification + code-review]
             CD2[superpowers<br/>finishing-branch]
         end
-        
+
         RF2 --> RTB2 --> FixSummary --> Pause2
         Pause2 -->|用户确认: 确认修复,开始执行| EP2
         EP2 --> CV2 --> CD2
@@ -189,8 +183,8 @@ flowchart TB
     DevTrigger --> RF1
     HotfixTrigger --> RF2
 
-    CD1 --> Done1[✅ 流程完成]
-    CD2 --> Done2[✅ 热修复完成]
+    CD1 --> Done1[(OK) 流程完成]
+    CD2 --> Done2[(OK) 热修复完成]
 
     style EntryRouter fill:#e1f5fe
     style DevTrigger fill:#c8e6c9
@@ -611,16 +605,29 @@ ai-devcopilot/
 │   └── opencode/                   # OpenCode 运行时产物
 ├── skills/ai-devcopilot/           # Skills 源目录（Pipeline 架构）
 │   ├── atoms/                      # 原子 Skill 层
-│   │   ├── analysis/               # 分析类：输入检测、需求提取、需求解析
+│   │   ├── analysis/               # 分析类：入口路由、输入检测、需求提取、需求解析
+│   │   │   ├── entry-router/
+│   │   │   ├── input-detect/
+│   │   │   ├── requirement-extract/
+│   │   │   └── requirement-parse/
 │   │   ├── devops/                 # 运维类：Jenkins、Nacos、SQL迁移
+│   │   │   ├── jenkins-trigger/
+│   │   │   ├── nacos-config/
+│   │   │   └── sql-migration/
 │   │   ├── feishu/                 # 飞书类：文档获取
+│   │   │   └── feishu-doc-fetch/
 │   │   ├── git/                    # Git类：分支创建、分支验证
-│   │   ├── memory/                 # 记忆类：更新记忆
-│   │   ├── planning/               # 计划类：生成计划、执行计划
-│   │   ├── review/                 # 审查类：代码审查
-│   │   └── verification/           # 验证类：编译测试验证
+│   │   │   ├── git-branch-create/
+│   │   │   └── git-branch-validate/
+│   │   └── memory/                 # 记忆类：更新记忆
+│   │       └── update-memory/
 │   ├── composites/                 # 组合 Skill 层
+│   │   └── workflow/               # 工作流组合
+│   │       ├── requirement-fetch/  # 多来源需求获取
+│   │       └── requirement-to-branch/ # 需求转分支
 │   ├── pipelines/                  # Pipeline 层
+│   │   ├── dev-flow/               # 标准开发流程
+│   │   └── hotfix-flow/            # 热修复流程
 │   └── registry/
 │       └── skills-registry.yml
 ├── templates/
@@ -630,11 +637,19 @@ ai-devcopilot/
 │   └── branch-completion-report.md
 ├── scripts/
 │   ├── build-dist.sh               # 生成多编辑器运行时产物
-│   └── validate-dist.sh            # 校验 dist 与默认 Agent 产物
+│   ├── validate-dist.sh            # 校验 dist 与默认 Agent 产物
+│   ├── check-registry.sh           # 校验 registry 配置
+│   ├── check-install-targets.sh    # 校验安装目标
+│   └── smoke-dev-flow.sh           # 开发流程冒烟测试
 ├── examples/                       # 使用示例
 ├── AI DevCopilot.md                # 默认 Agent 运行时产物（由构建脚本生成）
-├── install.sh                      # 安装脚本
-└── README.md                       # 项目说明
+├── install.sh                      # 安装脚本（macOS/Linux）
+├── install.ps1                     # 安装脚本（Windows）
+├── quick-install.sh                # 快速安装脚本
+├── env.sh.template                # 环境配置模板
+├── README.md                       # 项目说明（中文）
+├── README_EN.md                    # 项目说明（英文）
+└── AI 流程约束规则.md              # AI 协作流程约束规则
 ```
 
 ---
@@ -681,6 +696,6 @@ ai-devcopilot/
 
 ---
 
-**版本**: 1.4.0  
-**最后更新**: 2026-04-13  
+**版本**: 1.5.0
+**最后更新**: 2026-04-13
 **维护者**: weieast1314
