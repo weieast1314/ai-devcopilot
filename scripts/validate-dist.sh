@@ -14,7 +14,7 @@ if command -v jq >/dev/null 2>&1; then
 fi
 
 normalize_editor_id() {
-    echo "$1" | tr '[:upper:]' '[:lower:]'
+    echo "$1" | tr -d '\r' | tr '[:upper:]' '[:lower:]'
 }
 
 get_default_editor() {

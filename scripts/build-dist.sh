@@ -25,7 +25,7 @@ show_help() {
 }
 
 normalize_editor_id() {
-    echo "$1" | tr '[:upper:]' '[:lower:]'
+    echo "$1" | tr -d '\r' | tr '[:upper:]' '[:lower:]'
 }
 
 get_default_editor() {
