@@ -25,8 +25,8 @@ check_registry() {
 
     grep -q '"stageRequiredProvider": "superpowers"' "$registry_file" || { echo "registry 缺少 stageRequiredProvider=superpowers" >&2; exit 1; }
     grep -q '"onMissing": "blocking"' "$registry_file" || { echo "registry 缺少 onMissing=blocking" >&2; exit 1; }
-    grep -q '"required": "superpowers"' "$registry_file" || { echo "registry 缺少 required superpowers" >&2; exit 1; }
-    ! grep -q '"preferred": "superpowers"' "$registry_file" || { echo "registry 不应包含 preferred superpowers" >&2; exit 1; }
+    # Stage capabilities now exclusively provided by superpowers - no composite-level required superpowers
+    ! grep -q '"required": "superpowers"' "$registry_file" || { echo "registry 不应包含 composite required superpowers（阶段能力由 superpowers 统一提供）" >&2; exit 1; }
 }
 
 check_fallback() {

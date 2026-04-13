@@ -121,43 +121,8 @@ const matrixPath = path.join(root, registry.capabilityRefs.matrix);
 const matrix = JSON.parse(fs.readFileSync(matrixPath, 'utf8'));
 const capabilities = new Set(Object.keys(matrix.capabilities || {}));
 
-const mandatorySuperpowersComposites = {
-  'writing-plans': ['brainstorming', 'writing-plans'],
-  'executing-plans': ['executing-plans', 'test-driven-development', 'systematic-debugging'],
-  'code-verification': ['verification-before-completion', 'code-review'],
-  'code-delivery': ['finishing-branch']
-};
-
-for (const [name, expectedSkills] of Object.entries(mandatorySuperpowersComposites)) {
-  const composite = registry.composites.find((item) => item.name === name);
-  if (!composite) {
-    throw new Error(`missing mandatory composite: ${name}`);
-  }
-
-  const policy = composite.providerPolicy || {};
-  if (policy.required !== 'superpowers') {
-    throw new Error(`composite ${name} must set providerPolicy.required=superpowers`);
-  }
-  if (policy.onMissing !== 'blocking') {
-    throw new Error(`composite ${name} must set providerPolicy.onMissing=blocking`);
-  }
-  if (!Array.isArray(policy.requiredSkills) || policy.requiredSkills.length === 0) {
-    throw new Error(`composite ${name} must declare providerPolicy.requiredSkills`);
-  }
-
-  for (const skill of expectedSkills) {
-    if (!policy.requiredSkills.includes(skill)) {
-      throw new Error(`composite ${name} missing required skill: ${skill}`);
-    }
-  }
-
-  for (const skill of policy.requiredSkills) {
-    const capabilityKey = `skill.superpowers.${skill}`;
-    if (!capabilities.has(capabilityKey)) {
-      throw new Error(`missing capability declaration: ${capabilityKey}`);
-    }
-  }
-}
+// Stage capabilities are now provided exclusively by superpowers.
+// Pipeline stage validation is done via stageProviderPolicy checks below.
 
 for (const pipeline of registry.pipelines) {
   const policy = pipeline.stageProviderPolicy || {};
