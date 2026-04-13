@@ -3,7 +3,7 @@
 <div align="center">
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.3.0-green.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-1.5.0-green.svg)](CHANGELOG.md)
 [![GitHub Stars](https://img.shields.io/github/stars/weieast1314/ai-devcopilot?style=social)](https://github.com/weieast1314/ai-devcopilot/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/weieast1314/ai-devcopilot?style=social)](https://github.com/weieast1314/ai-devcopilot/network/members)
 [![GitHub Issues](https://img.shields.io/github/issues/weieast1314/ai-devcopilot)](https://github.com/weieast1314/ai-devcopilot/issues)
@@ -75,9 +75,9 @@ AI DevCopilot 采用 **Pipeline 架构**，实现细粒度的 Skill 分类和灵
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                     Composites (组合)                        │
+│                     Composites (组合 - 基础)                  │
 │  封装常用流程，组合多个原子 Skill                              │
-│  示例: requirement-fetch, code-delivery                      │
+│  示例: requirement-fetch, requirement-to-branch              │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
@@ -85,6 +85,13 @@ AI DevCopilot 采用 **Pipeline 架构**，实现细粒度的 Skill 分类和灵
 │                      Atoms (原子)                            │
 │  最小粒度的可复用能力单元，支持独立升级替换                       │
 │  示例: input-detect, feishu-doc-fetch, git-branch-create    │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                  Superpowers (过程型 - 强制)                  │
+│  计划/执行/验证/交付阶段强制调用的过程型 Skills                │
+│  示例: brainstorming, writing-plans, executing-plans         │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -138,18 +145,18 @@ flowchart TB
         
         subgraph Stage2["阶段2: 初始化"]
             RTB1[requirement-to-branch<br/>需求转分支]
-            WP[writing-plans<br/>生成执行计划]
+            WP[superpowers<br/>brainstorming + writing-plans]
             Pause1[⏸️ 暂停等待确认]
         end
         
         subgraph Stage3["阶段3: 实现"]
-            EP1[executing-plans<br/>按计划执行代码修改]
+            EP1[superpowers<br/>executing-plans + systematic-debugging]
             Report1[逐项汇报进度]
         end
         
         subgraph Stage4["阶段4: 交付"]
-            CV1[code-verification<br/>编译+测试+审查]
-            CD1[code-delivery<br/>提交+推送+部署]
+            CV1[superpowers<br/>verification + code-review]
+            CD1[superpowers<br/>finishing-branch]
         end
         
         RF1 --> RTB1 --> WP --> Pause1
@@ -166,12 +173,12 @@ flowchart TB
             RTB2[requirement-to-branch<br/>创建热修复分支]
             FixSummary[输出修复摘要]
             Pause2[⏸️ 暂停等待确认]
-            EP2[executing-plans<br/>执行简化修复]
+            EP2[superpowers<br/>executing-plans + systematic-debugging]
         end
         
         subgraph HStage3["阶段3: 快速交付"]
-            CV2[code-verification<br/>快速验证]
-            CD2[code-delivery<br/>部署到生产]
+            CV2[superpowers<br/>verification + code-review]
+            CD2[superpowers<br/>finishing-branch]
         end
         
         RF2 --> RTB2 --> FixSummary --> Pause2
@@ -198,7 +205,7 @@ flowchart TB
 flowchart LR
     subgraph 架构分层
         direction TB
-        L1[Pipeline 层<br/>流程编排] --> L2[Composite 层<br/>组合能力] --> L3[Atom 层<br/>原子能力]
+        L1[Pipeline 层<br/>流程编排] --> L2[Composite 层<br/>基础组合能力] --> L3[Atom 层<br/>原子能力] --> L4[Superpowers 层<br/>过程型能力(强制)]
     end
 
     subgraph 示例
@@ -206,11 +213,13 @@ flowchart LR
         C1 --> A1[input-detect]
         C1 --> A2[feishu-doc-fetch]
         C1 --> A3[requirement-parse]
+        P --> SP[superpowers<br/>阶段能力]
     end
 
     style L1 fill:#bbdefb
     style L2 fill:#c8e6c9
     style L3 fill:#fff9c4
+    style L4 fill:#ffcdd2
 ```
 
 ### 核心约束要点

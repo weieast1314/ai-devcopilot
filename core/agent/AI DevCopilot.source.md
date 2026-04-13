@@ -18,13 +18,9 @@
 └─────────────────────────────────────────┘
              ↓
 ┌─────────────────────────────────────────┐
-│  Composite 层（组合能力）                │
+│  Composite 层（组合能力 - 基础）          │
 │  - requirement-fetch: 多来源需求获取     │
 │  - requirement-to-branch: 需求转分支    │
-│  - writing-plans: 生成执行计划          │
-│  - executing-plans: 执行计划            │
-│  - code-verification: 代码验证          │
-│  - code-delivery: 代码交付              │
 └─────────────────────────────────────────┘
              ↓
 ┌─────────────────────────────────────────┐
@@ -32,11 +28,20 @@
 │  - analysis: 分析（输入检测、需求提取）  │
 │  - feishu: 飞书文档获取                 │
 │  - git: 分支创建与验证                  │
-│  - planning: 计划生成与执行             │
 │  - devops: Jenkins/Nacos/SQL           │
-│  - verification: 编译测试               │
-│  - review: 代码审查                     │
 │  - memory: 项目记忆                     │
+└─────────────────────────────────────────┘
+             ↓
+┌─────────────────────────────────────────┐
+│  Superpowers 层（过程型能力 - 强制）     │
+│  - brainstorming: 头脑风暴               │
+│  - writing-plans: 计划生成              │
+│  - executing-plans: 执行计划            │
+│  - test-driven-development: TDD        │
+│  - systematic-debugging: 系统调试      │
+│  - verification-before-completion: 验证│
+│  - code-review: 代码审查               │
+│  - finishing-branch: 分支收尾           │
 └─────────────────────────────────────────┘
 ```
 
@@ -322,6 +327,6 @@ export JENKINS_JOB_TEST="project-name-test"
 
 ---
 
-**版本**: 1.4.0  
+**版本**: 1.5.0  
 **最后更新**: 2026-04-13  
 **维护者**: weieast1314
