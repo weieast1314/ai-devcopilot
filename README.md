@@ -183,8 +183,8 @@ flowchart TB
     DevTrigger --> RF1
     HotfixTrigger --> RF2
 
-    CD1 --> Done1[(OK) 流程完成]
-    CD2 --> Done2[(OK) 热修复完成]
+    CD1 --> Done1{流程完成}
+    CD2 --> Done2{热修复完成}
 
     style EntryRouter fill:#e1f5fe
     style DevTrigger fill:#c8e6c9
