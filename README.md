@@ -196,24 +196,58 @@ flowchart TB
 ### 架构分层示意
 
 ```mermaid
-flowchart LR
-    subgraph 架构分层
+flowchart TB
+    subgraph Pipeline["Pipeline 层（流程编排）"]
+        direction LR
+        dev-flow
+        hotfix-flow
+    end
+
+    subgraph Composite["Composite 层（组合能力）"]
+        direction LR
+        requirement-fetch
+        requirement-to-branch
+    end
+
+    subgraph Atom["Atom 层（原子能力）"]
         direction TB
-        L1[Pipeline 层<br/>流程编排] --> L2[Composite 层<br/>基础组合能力] --> L3[Atom 层<br/>原子能力] --> L4[Superpowers 层<br/>过程型能力]
+        subgraph 分析域
+            entry-router
+            input-detect
+            requirement-parse
+        end
+        subgraph 运维域
+            jenkins-trigger
+            nacos-config
+            sql-migration
+        end
+        subgraph 外部集成
+            feishu-doc-fetch
+        end
+        subgraph 记忆
+            update-memory
+        end
+        subgraph Git操作
+            git-branch-create
+            git-branch-validate
+        end
     end
 
-    subgraph 示例
-        P[dev-flow] --> C1[requirement-fetch]
-        C1 --> A1[input-detect]
-        C1 --> A2[feishu-doc-fetch]
-        C1 --> A3[requirement-parse]
-        P --> SP[superpowers<br/>阶段能力]
+    subgraph Superpowers["Superpowers 层（过程型能力）"]
+        brainstorming
+        writing-plans
+        executing-plans
+        verification-before-completion
     end
 
-    style L1 fill:#bbdefb
-    style L2 fill:#c8e6c9
-    style L3 fill:#fff9c4
-    style L4 fill:#ffcdd2
+    Pipeline --> Composite
+    Composite --> Atom
+    Superpowers -.-> |"阶段能力"| Pipeline
+
+    style Pipeline fill:#bbdefb
+    style Composite fill:#c8e6c9
+    style Atom fill:#fff9c4
+    style Superpowers fill:#ffcdd2
 ```
 
 ### 核心约束要点
