@@ -18,13 +18,9 @@
     { "name": "feishu-doc-fetch", "category": "feishu", "version": "1.0.0", "provider": "local", "description": "获取飞书文档内容" },
     { "name": "git-branch-create", "category": "git", "version": "1.0.0", "provider": "local", "description": "创建符合规范的分支" },
     { "name": "git-branch-validate", "category": "git", "version": "1.0.0", "provider": "local", "description": "验证分支命名规范" },
-    { "name": "writing-plans", "category": "planning", "version": "1.0.0", "provider": "local", "description": "生成执行计划文档" },
-    { "name": "executing-plans", "category": "planning", "version": "1.0.0", "provider": "local", "description": "执行计划代码修改，完成后必须询问用户下一步动作" },
     { "name": "jenkins-trigger", "category": "devops", "version": "1.0.0", "provider": "local", "description": "触发 Jenkins 构建" },
     { "name": "sql-migration", "category": "devops", "version": "1.0.0", "provider": "local", "description": "生成 SQL 迁移脚本" },
     { "name": "nacos-config", "category": "devops", "version": "1.0.0", "provider": "local", "description": "管理 Nacos 配置" },
-    { "name": "verification", "category": "verification", "version": "1.0.0", "provider": "local", "description": "编译和测试验证，完成后必须询问用户下一步动作" },
-    { "name": "code-review", "category": "review", "version": "1.0.0", "provider": "local", "description": "代码审查" },
     { "name": "update-memory", "category": "memory", "version": "1.0.0", "provider": "local", "description": "更新项目记忆" }
   ],
   "composites": [
@@ -49,80 +45,32 @@
         "fallback": "local"
       },
       "description": "需求转分支"
-    },
-    {
-      "name": "writing-plans",
-      "category": "workflow",
-      "version": "1.0.0",
-      "dependsOn": ["writing-plans"],
-      "providerPolicy": {
-        "required": "superpowers",
-        "requiredSkills": ["brainstorming", "writing-plans"],
-        "onMissing": "blocking"
-      },
-      "description": "生成执行计划"
-    },
-    {
-      "name": "executing-plans",
-      "category": "workflow",
-      "version": "1.0.0",
-      "dependsOn": ["executing-plans"],
-      "providerPolicy": {
-        "required": "superpowers",
-        "requiredSkills": ["executing-plans", "test-driven-development", "systematic-debugging"],
-        "onMissing": "blocking"
-      },
-      "description": "执行计划"
-    },
-    {
-      "name": "code-verification",
-      "category": "workflow",
-      "version": "1.0.0",
-      "dependsOn": ["verification", "code-review"],
-      "providerPolicy": {
-        "required": "superpowers",
-        "requiredSkills": ["verification-before-completion", "code-review"],
-        "onMissing": "blocking"
-      },
-      "description": "代码验证"
-    },
-    {
-      "name": "code-delivery",
-      "category": "workflow",
-      "version": "1.0.0",
-      "dependsOn": ["jenkins-trigger", "update-memory"],
-      "providerPolicy": {
-        "required": "superpowers",
-        "requiredSkills": ["finishing-branch"],
-        "onMissing": "blocking"
-      },
-      "description": "代码交付"
     }
   ],
   "pipelines": [
     {
       "name": "dev-flow",
-      "version": "1.4.0",
-      "dependsOn": ["requirement-fetch", "requirement-to-branch", "writing-plans", "executing-plans", "code-verification", "code-delivery"],
+      "version": "1.5.0",
+      "dependsOn": ["requirement-fetch", "requirement-to-branch"],
       "stageProviderPolicy": {
         "sessionPreflight": "using-superpowers",
         "projectRouter": "entry-router",
         "stageRequiredProvider": "superpowers",
         "onMissing": "blocking"
       },
-      "description": "标准开发流程"
+      "description": "标准开发流程（阶段能力由 superpowers 强制提供）"
     },
     {
       "name": "hotfix-flow",
-      "version": "1.4.0",
-      "dependsOn": ["requirement-fetch", "requirement-to-branch", "executing-plans", "code-verification", "code-delivery"],
+      "version": "1.5.0",
+      "dependsOn": ["requirement-fetch", "requirement-to-branch"],
       "stageProviderPolicy": {
         "sessionPreflight": "using-superpowers",
         "projectRouter": "entry-router",
         "stageRequiredProvider": "superpowers",
         "onMissing": "blocking"
       },
-      "description": "热修复流程"
+      "description": "热修复流程（阶段能力由 superpowers 强制提供）"
     }
   ],
   "capabilityRefs": {
