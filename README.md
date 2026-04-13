@@ -199,7 +199,7 @@ flowchart TB
 flowchart LR
     subgraph 架构分层
         direction TB
-        L1[Pipeline 层<br/>流程编排] --> L2[Composite 层<br/>基础组合能力] --> L3[Atom 层<br/>原子能力] --> L4[Superpowers 层<br/>过程型能力(强制)]
+        L1[Pipeline 层<br/>流程编排] --> L2[Composite 层<br/>基础组合能力] --> L3[Atom 层<br/>原子能力] --> L4[Superpowers 层<br/>过程型能力]
     end
 
     subgraph 示例
