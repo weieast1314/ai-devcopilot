@@ -16,6 +16,14 @@
 - 添加行为准则 (CODE_OF_CONDUCT.md)
 - 添加 GitHub Issue 和 PR 模板
 - 完善 README.md，添加徽章和目录
+- 增加 `superpowers` 结构级整合说明与阶段映射文档
+- 在能力矩阵中新增 `skill.superpowers.*` 能力声明
+
+### 变更
+- 路由机制升级为三层强制优先级：会话级 `using-superpowers` → 项目级 `entry-router` → 阶段级强制 superpowers
+- `skills-registry.yml` 新增 provider / providerPolicy / stageProviderPolicy 元数据
+- `fallback-rules.json` 明确 superpowers 缺失时统一阻断流程（计划/执行/验证/交付）
+- 版本标识更新为 `1.4.0`（README 与 Agent 源文档）
 
 ## [1.3.0] - 2026-03-18
 

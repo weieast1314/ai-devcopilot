@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "capabilities": {
     "file.read": {
       "description": "读取项目文件与文档内容"
@@ -24,6 +24,33 @@
     },
     "code.review": {
       "description": "执行代码审查或读取审查结果"
+    },
+    "skill.superpowers.available": {
+      "description": "可调用 using-superpowers 进行会话级预检"
+    },
+    "skill.superpowers.brainstorming": {
+      "description": "可调用 superpowers 的 brainstorming 能力"
+    },
+    "skill.superpowers.writing-plans": {
+      "description": "可调用 superpowers 的 writing-plans 能力"
+    },
+    "skill.superpowers.executing-plans": {
+      "description": "可调用 superpowers 的 executing-plans 能力"
+    },
+    "skill.superpowers.test-driven-development": {
+      "description": "可调用 superpowers 的 test-driven-development 能力"
+    },
+    "skill.superpowers.systematic-debugging": {
+      "description": "可调用 superpowers 的 systematic-debugging 能力"
+    },
+    "skill.superpowers.verification-before-completion": {
+      "description": "可调用 superpowers 的 verification-before-completion 能力"
+    },
+    "skill.superpowers.code-review": {
+      "description": "可调用 superpowers 的 requesting/receiving-code-review 能力"
+    },
+    "skill.superpowers.finishing-branch": {
+      "description": "可调用 superpowers 的 finishing-a-development-branch 能力"
     }
   },
   "targets": {
@@ -31,7 +58,8 @@
       "dev-flow": {
         "requiredAll": [
           "file.read",
-          "file.write"
+          "file.write",
+          "skill.superpowers.available"
         ],
         "optional": [
           "shell.exec",
@@ -42,18 +70,31 @@
           "code.review"
         ],
         "phaseRequired": {
+          "planning": [
+            "skill.superpowers.brainstorming",
+            "skill.superpowers.writing-plans"
+          ],
+          "implementation": [
+            "skill.superpowers.executing-plans",
+            "skill.superpowers.test-driven-development",
+            "skill.superpowers.systematic-debugging"
+          ],
           "verification": [
-            "shell.exec"
+            "shell.exec",
+            "skill.superpowers.verification-before-completion",
+            "skill.superpowers.code-review"
           ],
           "delivery": [
-            "shell.exec"
+            "shell.exec",
+            "skill.superpowers.finishing-branch"
           ]
         }
       },
       "hotfix-flow": {
         "requiredAll": [
           "file.read",
-          "file.write"
+          "file.write",
+          "skill.superpowers.available"
         ],
         "optional": [
           "shell.exec",
@@ -62,8 +103,19 @@
           "code.review"
         ],
         "phaseRequired": {
+          "implementation": [
+            "skill.superpowers.executing-plans",
+            "skill.superpowers.test-driven-development",
+            "skill.superpowers.systematic-debugging"
+          ],
+          "verification": [
+            "shell.exec",
+            "skill.superpowers.verification-before-completion",
+            "skill.superpowers.code-review"
+          ],
           "delivery": [
-            "shell.exec"
+            "shell.exec",
+            "skill.superpowers.finishing-branch"
           ]
         }
       }
@@ -87,16 +139,33 @@
       },
       "writing-plans": {
         "requiredAll": [
-          "file.read"
+          "file.read",
+          "skill.superpowers.brainstorming",
+          "skill.superpowers.writing-plans"
         ],
         "optional": [
           "interaction.ask_followup",
           "state.persistence"
         ]
       },
+      "executing-plans": {
+        "requiredAll": [
+          "file.read",
+          "file.write",
+          "skill.superpowers.executing-plans",
+          "skill.superpowers.test-driven-development",
+          "skill.superpowers.systematic-debugging"
+        ],
+        "optional": [
+          "shell.exec",
+          "interaction.ask_followup"
+        ]
+      },
       "code-verification": {
         "requiredAll": [
-          "shell.exec"
+          "shell.exec",
+          "skill.superpowers.verification-before-completion",
+          "skill.superpowers.code-review"
         ],
         "optional": [
           "code.review",
@@ -105,7 +174,8 @@
       },
       "code-delivery": {
         "requiredAll": [
-          "shell.exec"
+          "shell.exec",
+          "skill.superpowers.finishing-branch"
         ],
         "optional": [
           "interaction.ask_followup"

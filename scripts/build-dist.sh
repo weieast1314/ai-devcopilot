@@ -134,7 +134,10 @@ mkdir -p "$DIST_DIR"
 DEFAULT_EDITOR=$(normalize_editor_id "$(get_default_editor)")
 
 if [ "$(normalize_editor_id "$TARGET_EDITOR")" = "all" ]; then
-    mapfile -t EDITORS < <(get_manifest_editors)
+    EDITORS=()
+    while IFS= read -r editor_id; do
+        [ -n "$editor_id" ] && EDITORS+=("$editor_id")
+    done < <(get_manifest_editors)
 else
     EDITORS=("$(normalize_editor_id "$TARGET_EDITOR")")
 fi

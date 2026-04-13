@@ -17,6 +17,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Add GitHub Issue and PR templates
 - Improve README.md with badges and table of contents
 - Add bilingual documentation support (Chinese/English)
+- Add structural integration docs for `superpowers` with stage mapping guidance
+- Add `skill.superpowers.*` capability declarations into the capability matrix
+
+### Changed
+- Upgrade routing to a three-level mandatory priority: session-level `using-superpowers` → project-level `entry-router` → stage-level required superpowers skills
+- Extend `skills-registry.yml` with provider / providerPolicy / stageProviderPolicy metadata
+- Update `fallback-rules.json` to enforce blocking behavior when superpowers skills are unavailable
+- Bump visible version markers to `1.4.0` in README and Agent source
 
 ## [1.3.0] - 2026-03-18
 

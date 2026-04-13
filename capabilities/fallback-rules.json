@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "fallbacks": {
     "feishu-doc-fetch": [
       {
@@ -25,6 +25,15 @@
     "writing-plans": [
       {
         "whenMissing": [
+          "skill.superpowers.available",
+          "skill.superpowers.writing-plans"
+        ],
+        "impact": "blocking",
+        "behavior": "stop_and_require_superpowers",
+        "userMessage": "当前环境未检测到 superpowers 计划能力，流程已阻断。请先启用 superpowers 后再继续。"
+      },
+      {
+        "whenMissing": [
           "interaction.ask_followup"
         ],
         "impact": "degraded",
@@ -40,7 +49,80 @@
         "userMessage": "当前环境不支持流程状态持久化，计划状态仅在当前会话内保留。"
       }
     ],
+    "executing-plans": [
+      {
+        "whenMissing": [
+          "skill.superpowers.available",
+          "skill.superpowers.executing-plans"
+        ],
+        "impact": "blocking",
+        "behavior": "stop_and_require_superpowers",
+        "userMessage": "当前环境未检测到 superpowers 执行能力，流程已阻断。请先启用 superpowers 后再继续。"
+      }
+    ],
+    "code-verification": [
+      {
+        "whenMissing": [
+          "skill.superpowers.available",
+          "skill.superpowers.verification-before-completion"
+        ],
+        "impact": "blocking",
+        "behavior": "stop_and_require_superpowers",
+        "userMessage": "当前环境未检测到 superpowers 完成前验证能力，流程已阻断。请先启用 superpowers 后再继续。"
+      },
+      {
+        "whenMissing": [
+          "shell.exec"
+        ],
+        "impact": "blocking",
+        "behavior": "output_manual_verification_commands",
+        "userMessage": "当前环境无法执行构建或测试命令，将只输出建议的验证命令与检查清单。"
+      },
+      {
+        "whenMissing": [
+          "code.review"
+        ],
+        "impact": "degraded",
+        "behavior": "compile_and_test_only",
+        "userMessage": "当前环境缺少代码审查能力，将仅执行编译与测试验证。"
+      }
+    ],
+    "code-delivery": [
+      {
+        "whenMissing": [
+          "skill.superpowers.available",
+          "skill.superpowers.finishing-branch"
+        ],
+        "impact": "blocking",
+        "behavior": "stop_and_require_superpowers",
+        "userMessage": "当前环境未检测到 superpowers 分支收尾能力，流程已阻断。请先启用 superpowers 后再继续。"
+      },
+      {
+        "whenMissing": [
+          "shell.exec"
+        ],
+        "impact": "blocking",
+        "behavior": "output_manual_git_and_delivery_steps",
+        "userMessage": "当前环境无法执行 Git 与部署命令，将只输出提交、推送、Jenkins/PR 交付步骤。"
+      },
+      {
+        "whenMissing": [
+          "interaction.ask_followup"
+        ],
+        "impact": "degraded",
+        "behavior": "fallback_to_text_delivery_menu",
+        "userMessage": "当前环境不支持结构化交付方式选择，将改为普通文本菜单。"
+      }
+    ],
     "dev-flow": [
+      {
+        "whenMissing": [
+          "skill.superpowers.available"
+        ],
+        "impact": "blocking",
+        "behavior": "stop_and_require_superpowers",
+        "userMessage": "当前环境未检测到 superpowers，dev-flow 已阻断。请先启用 superpowers 后再继续。"
+      },
       {
         "whenMissing": [
           "interaction.ask_followup"
@@ -69,47 +151,19 @@
     "hotfix-flow": [
       {
         "whenMissing": [
+          "skill.superpowers.available"
+        ],
+        "impact": "blocking",
+        "behavior": "stop_and_require_superpowers",
+        "userMessage": "当前环境未检测到 superpowers，hotfix-flow 已阻断。请先启用 superpowers 后再继续。"
+      },
+      {
+        "whenMissing": [
           "shell.exec"
         ],
         "impact": "partial_blocking",
         "behavior": "manual_hotfix_delivery_steps",
         "userMessage": "当前环境无法执行本地命令，热修复方案可继续生成，但验证与交付需由用户手动执行。"
-      }
-    ],
-    "code-verification": [
-      {
-        "whenMissing": [
-          "shell.exec"
-        ],
-        "impact": "blocking",
-        "behavior": "output_manual_verification_commands",
-        "userMessage": "当前环境无法执行构建或测试命令，将只输出建议的验证命令与检查清单。"
-      },
-      {
-        "whenMissing": [
-          "code.review"
-        ],
-        "impact": "degraded",
-        "behavior": "compile_and_test_only",
-        "userMessage": "当前环境缺少代码审查能力，将仅执行编译与测试验证。"
-      }
-    ],
-    "code-delivery": [
-      {
-        "whenMissing": [
-          "shell.exec"
-        ],
-        "impact": "blocking",
-        "behavior": "output_manual_git_and_delivery_steps",
-        "userMessage": "当前环境无法执行 Git 与部署命令，将只输出提交、推送、Jenkins/PR 交付步骤。"
-      },
-      {
-        "whenMissing": [
-          "interaction.ask_followup"
-        ],
-        "impact": "degraded",
-        "behavior": "fallback_to_text_delivery_menu",
-        "userMessage": "当前环境不支持结构化交付方式选择，将改为普通文本菜单。"
       }
     ]
   }

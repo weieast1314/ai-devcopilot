@@ -54,7 +54,10 @@ check_agent_file() {
     fi
 }
 
-mapfile -t EDITORS < <(get_manifest_editors)
+EDITORS=()
+while IFS= read -r editor_id; do
+    [ -n "$editor_id" ] && EDITORS+=("$editor_id")
+done < <(get_manifest_editors)
 DEFAULT_EDITOR=$(normalize_editor_id "$(get_default_editor)")
 DEFAULT_DIST_AGENT="$DIST_DIR/$DEFAULT_EDITOR/AI DevCopilot.md"
 

@@ -25,26 +25,27 @@
 
 ## 3. 核心强约束
 
-### 3.0 入口路由优先
+### 3.0 三层入口优先级（结构级整合）
 
-AI 在处理用户输入时，必须优先调用 `entry-router` 进行路由判断。
+AI 在处理用户输入时，必须遵循“三层优先级”，确保 `superpowers` 与本项目 Pipeline 协同。
 
 要求：
 
-1. 用户输入首先经过 `entry-router` 匹配 Pipeline trigger。
-2. 禁止直接调用原子层 skill（如 `feishu-doc-fetch`），必须通过 Pipeline 流程。
-3. 根据 `entry-router` 的路由结果触发对应 Pipeline（如 `dev-flow`、`hotfix-flow`）。
+1. **会话级（方法层）**：先调用 `using-superpowers` 完成技能可用性预检。
+2. **项目级（编排层）**：本项目任务必须先经过 `entry-router` 匹配 Pipeline trigger。
+3. **阶段级（能力层）**：进入 Pipeline 后按阶段强制调用 `superpowers` 过程 skill；若不可用则阻断流程，不允许回退本地同职责 skill。
+4. 禁止直接调用原子层 skill（如 `feishu-doc-fetch`），必须通过 Pipeline 流程。
 
 正确流程：
 
 ```
-用户输入 ──► entry-router ──► Pipeline ──► 组合层 ──► 原子层
+用户输入 ──► using-superpowers(强制) ──► entry-router ──► Pipeline ──► 组合层(强制 superpowers) ──► 原子层
 ```
 
 错误流程：
 
 ```
-用户输入 ──► 直接调用 feishu-doc-fetch ❌
+用户输入 ──► 跳过 entry-router 直接调用 feishu-doc-fetch ❌
 ```
 
 ### 3.1 先计划，后执行

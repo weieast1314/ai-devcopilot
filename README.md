@@ -96,6 +96,23 @@ AI DevCopilot 采用 **Pipeline 架构**，实现细粒度的 Skill 分类和灵
               └── 热修复 / 紧急修复 / 生产问题 → hotfix-flow → requirement-fetch
 ```
 
+### 与 superpowers 的结构级协同
+
+为避免流程冲突，项目采用“三层优先级”协同策略：
+
+1. **会话级（方法层）**：先调用 `using-superpowers` 做可用能力预检。  
+2. **项目级（编排层）**：本项目任务必须先经过 `entry-router` 路由到 `dev-flow` / `hotfix-flow`。  
+3. **阶段级（执行层）**：计划、执行、验证、收尾阶段强制使用 `superpowers` 过程型 Skills；不可用时直接阻断流程。
+
+阶段映射（强制）：
+
+| 阶段 | 强制 superpowers |
+|------|-------------------|
+| 计划 | `brainstorming` / `writing-plans` |
+| 实现 | `executing-plans` / `systematic-debugging` |
+| 验证 | `verification-before-completion` / `requesting-code-review` |
+| 交付 | `finishing-a-development-branch` |
+
 ---
 
 ## 🔄 工作流程图
@@ -655,6 +672,6 @@ ai-devcopilot/
 
 ---
 
-**版本**: 1.3.0  
-**最后更新**: 2026-03-27  
+**版本**: 1.4.0  
+**最后更新**: 2026-04-13  
 **维护者**: weieast1314
