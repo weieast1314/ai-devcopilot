@@ -136,7 +136,7 @@ DEFAULT_EDITOR=$(normalize_editor_id "$(get_default_editor)")
 if [ "$(normalize_editor_id "$TARGET_EDITOR")" = "all" ]; then
     EDITORS=()
     while IFS= read -r editor_id; do
-        [ -n "$editor_id" ] && EDITORS+=("$editor_id")
+        [ -n "$editor_id" ] && EDITORS+=("$(normalize_editor_id "$editor_id")")
     done < <(get_manifest_editors)
 else
     EDITORS=("$(normalize_editor_id "$TARGET_EDITOR")")
