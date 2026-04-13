@@ -86,6 +86,19 @@ jobs:
           bash scripts/check-install-targets.sh
           bash scripts/smoke-dev-flow.sh
 
+      - name: Debug dist
+        if: always()
+        shell: bash
+        run: |
+          echo "=== dist contents ==="
+          ls -la dist/ 2>/dev/null || echo "dist not found"
+          echo "=== claude dir ==="
+          ls -la dist/claude/ 2>/dev/null || echo "claude dir missing"
+          echo "=== file existence ==="
+          test -f "dist/claude/AI DevCopilot.md" && echo "claude/AI DevCopilot.md EXISTS" || echo "claude/AI DevCopilot.md MISSING"
+          test -f "dist/codebuddy/AI DevCopilot.md" && echo "codebuddy/AI DevCopilot.md EXISTS" || echo "codebuddy/AI DevCopilot.md MISSING"
+          test -f "dist/opencode/AI DevCopilot.md" && echo "opencode/AI DevCopilot.md EXISTS" || echo "opencode/AI DevCopilot.md MISSING"
+
       - name: Validate PowerShell installer
         shell: pwsh
         run: |
